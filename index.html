@@ -446,18 +446,7 @@ function formatDayTime(dateStr, timeStr){
 renderCalendar();
 renderWeeks();
 
-    // === Basis Setup ===
-    const themeToggle = document.getElementById('themeToggle');
-    const notifToggle = document.getElementById('notifToggle');
-    const clearBtn = document.getElementById('clearBtn');
-    const calendar = document.getElementById('calendar');
-    const weeksContainer = document.getElementById('weeks');
-    const sendBtn = document.getElementById('sendBtn');
-    const inputText = document.getElementById('inputText');
-
-    let events = [];
-
-    // === Kalender anzeigen ===
+      // === Kalender anzeigen ===
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
@@ -580,4 +569,5 @@ renderWeeks();
   </script>
 </body>
 </html>
+
 

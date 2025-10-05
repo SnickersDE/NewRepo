@@ -168,8 +168,15 @@
   </header>
 
   <main>
-    <div id="calendar"></div>
-    <div id="weeks"></div>
+    <!-- === Monats-Header mit Navigation === -->
+<div id="calendarHeader" style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px;">
+  <button id="prevMonth" class="control-btn" aria-label="Vorheriger Monat">◀</button>
+  <div id="monthTitle" style="font-weight:700; font-size:1.05rem; text-align:center;"></div>
+  <button id="nextMonth" class="control-btn" aria-label="Nächster Monat">▶</button>
+</div>
+
+<!-- Hier bleibt das Grid -->
+<div id="calendar"></div>
 
     <div class="input-area">
       <input id="inputText" type="text" placeholder="Neuen Termin eingeben... (z. B. 'Morgen 14 Uhr Meeting')">
@@ -179,6 +186,266 @@
   </main>
 
   <script>
+    /* -----------------------------
+  Monatsanzeige + Navigation
+  + Wochenüberschriften mit vollem Zeitraum
+   - Einfaches Drop-in: ersetzt die alte renderMonth / renderWeeks Logik
+------------------------------*/
+
+const calendar = document.getElementById('calendar');
+const monthTitleEl = document.getElementById('monthTitle');
+const prevMonthBtn = document.getElementById('prevMonth');
+const nextMonthBtn = document.getElementById('nextMonth');
+
+// Aktuelle Ansicht (Monat/Jahr) initialisieren
+let viewDate = new Date(); // zeigt aktuellen Monat
+
+// Event-Listener für Nav-Buttons
+prevMonthBtn && prevMonthBtn.addEventListener('click', () => { changeMonth(-1); });
+nextMonthBtn && nextMonthBtn.addEventListener('click', () => { changeMonth(1); });
+
+function changeMonth(offset){
+  viewDate.setMonth(viewDate.getMonth() + offset);
+  renderCalendar();   // rendert Grid neu
+  markDays();         // markiert Tage mit Events neu
+}
+
+// Month Title (z. B. "Oktober 2025")
+function updateMonthTitle(){
+  const monthNames = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+  monthTitleEl.textContent = `${monthNames[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
+}
+
+// Rendert das Grid (Monatsansicht) für viewDate
+function renderCalendar(){
+  calendar.innerHTML = '';
+  updateMonthTitle();
+
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+
+  // erster Tag des Monats
+  const first = new Date(year, month, 1);
+  // Anzahl leerer Zellen vor dem 1. (Montag-basiert)
+  const leadingEmpty = (first.getDay() + 6) % 7; // konvertiert JS Sun=0 -> index
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  // leere Zellen
+  for(let i=0; i<leadingEmpty; i++){
+    const empty = document.createElement('div');
+    empty.className = 'day empty';
+    calendar.appendChild(empty);
+  }
+
+  // Tage
+  for(let d=1; d<=daysInMonth; d++){
+    const cellDate = new Date(year, month, d);
+    const cell = document.createElement('div');
+    cell.className = 'day';
+    cell.dataset.day = d; // handy für Markierung
+    // Datum-Nummer
+    const dateNum = document.createElement('div');
+    dateNum.className = 'date-num';
+    dateNum.textContent = d;
+    cell.appendChild(dateNum);
+    calendar.appendChild(cell);
+  }
+
+  // nach rendern: markiere Tage mit Events
+  markDays();
+}
+
+// markiert Tage (Events) im aktuell sichtbaren Monat
+function markDays(){
+  // entferne alte Markierungen / Pills
+  calendar.querySelectorAll('.day').forEach(c => {
+    // lösche event-bezogene Klassen und Zusatzknoten
+    c.classList.remove('private','work','has-event');
+    c.querySelectorAll('.event-pill, .span-pill').forEach(n => n.remove());
+  });
+
+  // Gehe alle Events durch und markiere Zellen innerhalb dieses Monats
+  events.forEach(ev => {
+    // event.start und ev.end ggf. nutzen
+    const start = parseYMD(ev.date);
+    const end = ev.endDate ? parseYMD(ev.endDate) : start;
+
+    // für jeden Tag im Event-Zeitraum
+    for(let d = new Date(start); d <= end; d.setDate(d.getDate()+1)){
+      if(d.getFullYear() === viewDate.getFullYear() && d.getMonth() === viewDate.getMonth()){
+        const cell = calendar.querySelector(`.day[data-day='${d.getDate()}']`);
+        if(!cell) continue;
+        // setze Typ-Klasse
+        if(ev.type === 'private') cell.classList.add('private');
+        else if(ev.type === 'work') cell.classList.add('work');
+
+        // wenn Event mehrtägig (endDate existiert) -> span-pill (leichter Fill)
+        if(ev.endDate){
+          const span = document.createElement('div');
+          span.className = 'span-pill ' + (ev.type === 'private' ? 'type-private' : ev.type === 'work' ? 'type-work' : 'type-default');
+          span.textContent = ev.title.length > 22 ? ev.title.slice(0,20) + '…' : ev.title;
+          cell.appendChild(span);
+        } else {
+          // Ein-Tages-Event: event-pill mit Zeit
+          const pill = document.createElement('div');
+          pill.className = 'event-pill ' + (ev.type === 'private' ? 'type-private' : ev.type === 'work' ? 'type-work' : 'type-default');
+          pill.innerHTML = `<div style="font-size:12px; font-weight:700;">${ev.title.length>18?ev.title.slice(0,16)+'…':ev.title}</div><div class="tiny-muted" style="font-size:11px">${ev.startTime||''}</div>`;
+          cell.appendChild(pill);
+        }
+      }
+    }
+  });
+}
+
+/* --------------------------
+  Wochenliste: komplette Woche anzeigen (Start - Ende)
+---------------------------*/
+function renderWeeks(){
+  const container = document.getElementById('weeksList') || document.getElementById('weeks');
+
+  if(!container) return;
+  container.innerHTML = '';
+
+  const today = startOfDay(new Date());
+  const weeksWithEvents = [];
+
+  // prüfe die nächsten 12 Wochen (konfigurierbar)
+  for(let w=0; w<12; w++){
+    const start = addDays(startOfWeek(today), w*7);
+    const end = addDays(start, 6);
+
+    // finde Events in diesem Zeitraum
+    const evs = events.filter(e => {
+      const d = parseYMD(e.date);
+      const sCmp = startOfDay(d);
+      return sCmp >= start && sCmp <= end;
+    }).sort((a,b) => {
+      const da = new Date(a.date + 'T' + (a.startTime || '00:00'));
+      const db = new Date(b.date + 'T' + (b.startTime || '00:00'));
+      return da - db;
+    });
+
+    if(evs.length) weeksWithEvents.push({ start, end, events: evs });
+  }
+
+  if(weeksWithEvents.length === 0){
+    container.innerHTML = `<div class="tiny-muted">Keine kommenden Termine.</div>`;
+    return;
+  }
+
+  weeksWithEvents.forEach(wk => {
+    const item = document.createElement('div');
+    item.className = 'week-item';
+
+    const title = document.createElement('div');
+    title.className = 'week-title';
+    title.innerHTML = `<div>${formatRange(wk.start, wk.end)}</div><div class="tiny-muted">${wk.events.length} Termine</div>`;
+    item.appendChild(title);
+
+    wk.events.forEach(ev => {
+      const row = document.createElement('div');
+      row.className = 'event-row ' + (ev.type === 'private' ? 'private' : (ev.type === 'work' ? 'work' : 'default'));
+
+      const left = document.createElement('div');
+      left.style.display = 'flex';
+      left.style.flexDirection = 'column';
+      left.innerHTML = `<div style="font-weight:700">${ev.title}</div><div class="tiny-muted">${formatDayTime(ev.date, ev.startTime)}</div>`;
+
+      const right = document.createElement('div');
+      right.style.display = 'flex';
+      right.style.gap = '8px';
+
+      const sendBtn = document.createElement('button');
+      sendBtn.className = 'send-icon';
+      sendBtn.title = 'An Google Kalender senden';
+      sendBtn.innerHTML = '📤';
+      sendBtn.dataset.id = ev.id;
+      sendBtn.addEventListener('click', (evClick) => {
+        evClick.stopPropagation();
+        const id = evClick.currentTarget.dataset.id;
+        const eventObj = events.find(x => x.id === id);
+        if(eventObj) window.open(generateGoogleCalendarUrl(eventObj), '_blank');
+      });
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'delete-icon';
+      delBtn.title = 'Termin löschen';
+      delBtn.innerHTML = '🗑️';
+      delBtn.dataset.id = ev.id;
+      delBtn.addEventListener('click', (eClick) => {
+        eClick.stopPropagation();
+        const id = eClick.currentTarget.dataset.id;
+        if(confirm('Termin löschen?')){
+          events = events.filter(x => x.id !== id);
+          saveEvents();
+          renderCalendar();
+          renderWeeks();
+        }
+      });
+
+      right.appendChild(sendBtn);
+      right.appendChild(delBtn);
+
+      row.appendChild(left);
+      row.appendChild(right);
+
+      item.appendChild(row);
+    });
+
+    container.appendChild(item);
+  });
+}
+
+/* -------------------------
+  Hilfsfunktionen (falls noch nicht vorhanden)
+--------------------------*/
+function startOfDay(d){
+  const x = new Date(d);
+  x.setHours(0,0,0,0);
+  return x;
+}
+
+function startOfWeek(d){
+  const x = new Date(d);
+  const day = x.getDay(); // 0..6 (Sun..Sat)
+  const diff = (day + 6) % 7; // Monday=0
+  x.setDate(x.getDate() - diff);
+  x.setHours(0,0,0,0);
+  return x;
+}
+
+function addDays(d, n){
+  const x = new Date(d);
+  x.setDate(x.getDate() + n);
+  x.setHours(0,0,0,0);
+  return x;
+}
+
+function formatDDMMYYYY(d){
+  const D = new Date(d);
+  const dd = String(D.getDate()).padStart(2,'0');
+  const mm = String(D.getMonth()+1).padStart(2,'0');
+  const yyyy = D.getFullYear();
+  return `${dd}.${mm}.${yyyy}`;
+}
+
+function formatRange(start, end){
+  return `${formatDDMMYYYY(start)} - ${formatDDMMYYYY(end)}`;
+}
+
+function formatDayTime(dateStr, timeStr){
+  const d = new Date(dateStr);
+  const day = d.toLocaleDateString('de-DE',{weekday:'short', day:'2-digit', month:'short'});
+  return timeStr ? `${day} • ${timeStr}` : `${day}`;
+}
+
+/* -------------------------
+  Initial render (call this once on load)
+---------------------------*/
+renderCalendar();
+renderWeeks();
+
     // === Basis Setup ===
     const themeToggle = document.getElementById('themeToggle');
     const notifToggle = document.getElementById('notifToggle');
@@ -313,3 +580,4 @@
   </script>
 </body>
 </html>
+

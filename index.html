@@ -1,323 +1,351 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>MEIN KALENDAR</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MEIN KALENDER</title>
 
-  <!-- Spartan Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- Spartan Font -->
+<link href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bordeaux: #800020;
-      --bordeaux-strong:#6b0018;
-      --white:#ffffff;
-      --black:#000000;
-      --glass: rgba(255,255,255,0.10);
-      --glass-dark: rgba(0,0,0,0.45);
-      --radius: 12px;
-      --shadow: 0 6px 20px rgba(0,0,0,0.18);
-      --accent-trans: rgba(128,0,32,0.18);
-    }
+<style>
+:root{
+  --bordeaux: #800020;
+  --bordeaux-strong:#6b0018;
+  --white:#ffffff;
+  --black:#000000;
+  --glass: rgba(255,255,255,0.10);
+  --glass-dark: rgba(0,0,0,0.45);
+  --radius: 12px;
+  --shadow: 0 6px 20px rgba(0,0,0,0.18);
+  --accent-trans: rgba(128,0,32,0.18);
+  --max-pills-per-day: 2;
+  --max-weeklist-events: 50;
+}
 
-    [data-theme="dark"] {
-      --bg: var(--black);
-      --panel: var(--glass-dark);
-      --text: #fff;
-    }
+/* THEMES */
+[data-theme="dark"] {
+  --bg: var(--black);
+  --panel: var(--glass-dark);
+  --text: #fff;
+}
 
-    [data-theme="light"] {
-      --bg: #f7f7f7;
-      --panel: rgba(255,255,255,0.6);
-      --text: #111;
-    }
+[data-theme="light"] {
+  --bg: #f7f7f7;
+  --panel: rgba(255,255,255,0.6);
+  --text: #111;
+}
 
-    html,body{
-      height:100%;
-      margin:0;
-      padding:0;
-      font-family: 'Spartan', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
+/* Base */
+html,body{
+  height:100%;
+  margin:0;
+  padding:0;
+  font-family: 'Spartan', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  background-color: var(--bg, #f7f7f7);
+  color: var(--text, #111);
+}
 
-    body{
-      background: url('hintergrund.jpg') center/cover no-repeat fixed;
-      background-color: var(--bg, #f7f7f7);
-      color: var(--text, #111);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      min-height:100vh;
-      transition: background-color .25s ease;
-    }
+/* Keep your original layout and styles */
+body{
+  background: url('hintergrund.jpg') center/cover no-repeat fixed;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
+  transition: background-color .25s ease;
+}
 
-    .app {
-      width:95%;
-      max-width:980px;
-      margin-top:20px;
-      margin-bottom:40px;
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap:18px;
-    }
+.app {
+  width:95%;
+  max-width:980px;
+  margin-top:20px;
+  margin-bottom:40px;
+  display:grid;
+  grid-template-columns: 1fr 360px;
+  gap:18px;
+}
 
-    header.app-header {
-      grid-column: 1/3;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:14px;
-      background:var(--panel);
-      border-radius:14px;
-      box-shadow:var(--shadow);
-      border: 1px solid rgba(255,255,255,0.06);
-      backdrop-filter: blur(6px);
-      position: relative;
-    }
+header.app-header {
+  grid-column: 1/3;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px;
+  background:var(--panel);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(6px);
+  position:relative;
+}
 
-    header .title {
-      font-size:18px;
-      font-weight:700;
-      letter-spacing:1px;
-      color:var(--text);
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
+/* Title + Google import (small) */
+header .title {
+  font-size:18px;
+  font-weight:700; /* Spartan Bold */
+  letter-spacing:1px;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-    .google-import {
-      display:flex;
-      align-items:center;
-      font-size:10px;
-      color:rgba(255,255,255,0.5);
-      cursor:pointer;
-      gap:4px;
-    }
+/* Google import small area */
+.google-import {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  opacity:0.8;
+  cursor:pointer;
+  color:var(--text);
+  background: transparent;
+  border-radius:8px;
+  padding:4px 6px;
+}
+.google-import .label { font-size:11px; opacity:0.7; }
 
-    .google-import:hover { color: rgba(255,255,255,0.8); }
+/* controls */
+.controls {
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
 
-    .controls {
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
+.control-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding:8px 12px;
+  border-radius:10px;
+  color:var(--text);
+  cursor:pointer;
+  font-weight:600;
+}
 
-    .control-btn {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.08);
-      padding:8px 12px;
-      border-radius:10px;
-      color:var(--text);
-      cursor:pointer;
-      font-weight:600;
-    }
+/* Left: Calendar area */
+.calendar-card {
+  background:var(--panel);
+  border-radius:14px;
+  padding:14px;
+  box-shadow:var(--shadow);
+  min-height:420px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  border: 1px solid rgba(0,0,0,0.04);
+}
 
-    .calendar-card {
-      background:var(--panel);
-      border-radius:14px;
-      padding:14px;
-      box-shadow:var(--shadow);
-      min-height:420px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      border: 1px solid rgba(0,0,0,0.04);
-    }
+.month-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-    .month-header {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
+.month-title {
+  font-size:18px;
+  font-weight:700;
+  color:var(--text);
+}
 
-    .month-title {
-      font-size:18px;
-      font-weight:700;
-      color:var(--text);
-    }
+.nav-btn {
+  background:transparent;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);
+  padding:6px 10px;
+  cursor:pointer;
+  color:var(--text);
+}
 
-    .nav-btn {
-      background:transparent;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.06);
-      padding:6px 10px;
-      cursor:pointer;
-      color:var(--text);
-    }
+/* Calendar grid */
+.calendar-grid {
+  display:grid;
+  grid-template-columns: repeat(7,1fr);
+  gap:8px;
+}
 
-    .calendar-grid {
-      display:grid;
-      grid-template-columns: repeat(7,1fr);
-      gap:8px;
-    }
+.day {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:10px;
+  padding:8px;
+  min-height:90px;
+  position:relative;
+  border: 1px solid rgba(255,255,255,0.06);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  transition: transform .12s ease;
+  overflow:hidden;
+}
 
-    .day {
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:10px;
-      padding:8px;
-      min-height:90px;
-      position:relative;
-      border: 1px solid rgba(255,255,255,0.06);
-      color:var(--text);
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      transition: transform .12s ease;
-    }
+.day:hover { transform: translateY(-4px); }
 
-    .day:hover { transform: translateY(-3px); }
+.day .date-num { font-size:13px; font-weight:700; display:flex; flex-direction:column; }
+.day .weekday { font-size:10px; font-weight:400; opacity:0.6; margin-top:3px; }
 
-    .day .date-num {
-      font-size:13px;
-      font-weight:700;
-      display:flex;
-      flex-direction:column;
-      align-items:flex-start;
-    }
+/* Event pill */
+.event-pill {
+  margin-top:auto;
+  padding:6px 8px;
+  border-radius:10px;
+  font-size:12px;
+  background: rgba(255,255,255,0.06);
+  color:var(--text);
+  border-left:6px solid rgba(255,255,255,0.08);
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+  align-items:center;
+  position:relative;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
-    .day .date-num span {
-      font-size:9px;
-      font-weight:400;
-      margin-top:2px;
-    }
+/* small Google icon in pill */
+.event-pill .gc-link {
+  font-size:12px;
+  color:var(--bordeaux);
+  cursor:pointer;
+  margin-left:4px;
+  text-decoration:none;
+}
 
-    .event-pill {
-      margin-top:auto;
-      padding:6px 8px;
-      border-radius:10px;
-      font-size:12px;
-      background: rgba(255,255,255,0.06);
-      color:var(--text);
-      border-left:6px solid rgba(255,255,255,0.08);
-      display:flex;
-      justify-content:space-between;
-      gap:8px;
-      align-items:center;
-    }
+/* colors by type */
+.type-default { border-left-color: rgba(255,255,255,0.08); }
+.type-private { border-left-color: #d32f2f; }
+.type-work    { border-left-color: #2e7d32; }
 
-    .type-default { border-left-color: rgba(255,255,255,0.08); }
-    .type-private { border-left-color: #d32f2f; }
-    .type-work    { border-left-color: #2e7d32; }
+/* highlight days with all-day events */
+.day.ganztag {
+  background: linear-gradient(180deg, rgba(128,0,32,0.08), rgba(128,0,32,0.03));
+  border: 2px solid var(--bordeaux-strong);
+}
 
-    .side-card {
-      background:var(--panel);
-      border-radius:14px;
-      padding:12px;
-      box-shadow:var(--shadow);
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
+/* Right column: Input & week list */
+.side-card {
+  background:var(--panel);
+  border-radius:14px;
+  padding:12px;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
 
-    .input-row {
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
+.input-row {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
 
-    .input-row input[type="text"]{
-      flex:1;
-      padding:10px 12px;
-      border-radius:10px;
-      border: none;
-      outline:none;
-      background: rgba(255,255,255,0.03);
-      color:var(--text);
-      font-weight:600;
-    }
+.input-row input[type="text"]{
+  flex:1;
+  padding:10px 12px;
+  border-radius:10px;
+  border: none;
+  outline:none;
+  background: rgba(255,255,255,0.03);
+  color:var(--text);
+  font-weight:700; /* Spartan bold text in input */
+}
 
-    .small-select {
-      padding:8px 10px;
-      background: transparent;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.06);
-      color:var(--text);
-      font-weight:600;
-    }
+.small-select {
+  padding:8px 10px;
+  background: transparent;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);
+  color:var(--text);
+  font-weight:600;
+}
 
-    .icon-btn {
-      padding:8px 10px;
-      border-radius:10px;
-      background:var(--bordeaux);
-      color:var(--white);
-      border:none;
-      cursor:pointer;
-      font-weight:700;
-    }
+/* icon buttons */
+.icon-btn {
+  padding:8px 10px;
+  border-radius:10px;
+  background:var(--bordeaux);
+  color:var(--white);
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+}
 
-    .weeks-list {
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      max-height:420px;
-      overflow:auto;
-    }
+/* weeks list */
+.weeks-list {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  max-height:420px;
+  overflow:auto;
+}
 
-    .week-item {
-      border-radius:10px;
-      padding:10px;
-      background: rgba(255,255,255,0.02);
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      border:1px solid rgba(255,255,255,0.03);
-    }
+.week-item {
+  border-radius:10px;
+  padding:10px;
+  background: rgba(255,255,255,0.02);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  border:1px solid rgba(255,255,255,0.03);
+}
 
-    .week-title {
-      font-weight:700;
-      color:var(--text);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
+.week-title {
+  font-weight:700;
+  color:var(--text);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-    .event-row {
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      padding:6px 8px;
-      border-radius:8px;
-      background: rgba(255,255,255,0.01);
-      align-items:center;
-      border-left: 6px solid rgba(255,255,255,0.03);
-    }
+.event-row {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:6px 8px;
+  border-radius:8px;
+  background: rgba(255,255,255,0.01);
+  align-items:center;
+  border-left: 6px solid rgba(255,255,255,0.03);
+  cursor:pointer;
+}
 
-    .event-row.private { border-left-color: #d32f2f; }
-    .event-row.work    { border-left-color: #2e7d32; }
-    .event-row.default { border-left-color: rgba(255,255,255,0.06); }
+.event-row.private { border-left-color: #d32f2f; }
+.event-row.work    { border-left-color: #2e7d32; }
+.event-row.default { border-left-color: rgba(255,255,255,0.06); }
 
-    .tiny-muted { font-size:12px; opacity:0.7; }
+.tiny-muted { font-size:12px; opacity:0.7; }
 
-    @media (max-width:980px){
-      .app { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width:600px){
-      .calendar-grid { grid-template-columns: repeat(auto-fit,minmax(60px,1fr)); gap:4px; }
-      .day { min-height:70px; padding:4px; font-size:11px; }
-      .date-num { font-size:10px; }
-      .day .date-num span { font-size:8px; }
-    }
-  </style>
+/* responsive */
+@media (max-width:980px){
+  .app { grid-template-columns: 1fr; }
+  .google-import { font-size:11px; }
+}
+</style>
 </head>
 <body data-theme="light">
 
   <div class="app">
     <header class="app-header">
       <div class="title">
-        MEIN KALENDAR
-        <div class="google-import" id="googleImportBtn">
-          📅 <span>An dein Google Kalender importieren</span>
+        MEIN KALENDER
+        <div id="googleImportBtn" class="google-import" title="Alle Termine an Google Kalender senden">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="opacity:0.95;">
+            <path d="M3 4a2 2 0 012-2h2v2H5v16h14V4h-2V2h2a2 2 0 012 2v18a2 2 0 01-2 2H5a2 2 0 01-2-2V4z" fill="currentColor"/>
+            <path d="M7 8h10v2H7z" fill="white" opacity="0.9"/>
+          </svg>
+          <span class="label">An dein Google Kalender importieren</span>
         </div>
       </div>
       <div class="controls">
-        <button id="themeToggle" class="control-btn">🌙 / ☀</button>
+        <button id="themeToggle" class="control-btn" title="Theme umschalten">🌙 / ☀</button>
         <button id="pushToggle" class="control-btn">🔔</button>
       </div>
     </header>
 
+    <!-- calendar left -->
     <section class="calendar-card" id="calendarCard">
       <div class="month-header">
         <button class="nav-btn" id="prevMonth">◀</button>
@@ -325,13 +353,16 @@
         <button class="nav-btn" id="nextMonth">▶</button>
       </div>
 
-      <div class="calendar-grid" id="calendarGrid"></div>
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- days injected here -->
+      </div>
     </section>
 
+    <!-- right: input & weeks -->
     <aside class="side-card">
       <div>
         <div class="input-row">
-          <input id="freeInput" type="text" placeholder="z.B. Jeden Montag laufen im nächsten Monat">
+          <input id="freeInput" type="text" placeholder="z.B. jeden Montag 18-19 Sport">
           <select id="typeSelect" class="small-select">
             <option value="default">Standard</option>
             <option value="private">Privat</option>
@@ -340,224 +371,563 @@
           <button id="micBtn" class="icon-btn" title="Sprache (später) 🎙">🎙</button>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px;">
-          <button id="addEventBtn" class="icon-btn" style="background:var(--bordeaux)">+</button>
-          <button id="clearBtn" class="control-btn">Clear</button>
+          <button id="addEventBtn" class="icon-btn" style="background:var(--bordeaux)">Hinzufügen</button>
+          <button id="clearBtn" class="control-btn">Kalender zurücksetzen</button>
         </div>
       </div>
 
       <div>
         <div style="font-weight:700;margin-bottom:8px;">Kommende Wochen</div>
-        <div class="weeks-list" id="weeksList"></div>
+        <div class="weeks-list" id="weeksList">
+          <!-- week items injected -->
+        </div>
       </div>
     </aside>
   </div>
 
 <script>
-const calendarGrid = document.getElementById("calendarGrid");
-const monthTitle = document.getElementById("monthTitle");
-const prevMonthBtn = document.getElementById("prevMonth");
-const nextMonthBtn = document.getElementById("nextMonth");
-const addEventBtn = document.getElementById("addEventBtn");
-const freeInput = document.getElementById("freeInput");
-const typeSelect = document.getElementById("typeSelect");
-const weeksList = document.getElementById("weeksList");
-const googleImportBtn = document.getElementById("googleImportBtn");
+/* =========================
+   Full JS: parser, render,
+   persistence, Google export
+   ========================= */
 
-let currentDate = new Date();
-let events = []; // Alle Events speichern
+const STORAGE_KEY = 'mein_kalender_events_v_final_v1';
+const THEME_KEY = 'mein_kalender_theme_v1';
+let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); // array of event objects
+let viewDate = new Date(); // currently shown month
 
-function renderCalendar(date){
-    calendarGrid.innerHTML = "";
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const startDay = firstDay.getDay() === 0 ? 7 : firstDay.getDay(); // Sonntag=7
-    const daysInMonth = lastDay.getDate();
-
-    monthTitle.textContent = `${firstDay.toLocaleString('de-DE',{month:'long'})} ${year}`;
-
-    // Platzhalter für Tage vor Monatsanfang
-    for(let i=1; i<startDay; i++){
-        const emptyCell = document.createElement("div");
-        emptyCell.className="day";
-        calendarGrid.appendChild(emptyCell);
-    }
-
-    // Tage
-    for(let d=1; d<=daysInMonth; d++){
-        const dayDiv = document.createElement("div");
-        dayDiv.className="day";
-        const dayDate = new Date(year, month, d);
-        const weekdayName = dayDate.toLocaleDateString('de-DE',{weekday:'short'});
-        dayDiv.innerHTML = `<div class="date-num">${d}<span>${weekdayName}</span></div>`;
-        
-        const dayEvents = events.filter(e => e.date.toDateString() === dayDate.toDateString());
-        dayEvents.forEach(ev=>{
-            const pill = document.createElement("div");
-            pill.className=`event-pill type-${ev.type}`;
-            pill.textContent = ev.title;
-            dayDiv.appendChild(pill);
-        });
-
-        calendarGrid.appendChild(dayDiv);
-    }
-}
-
-function addEvent(title,type,date){
-    events.push({title,type,date});
-    renderCalendar(currentDate);
-    renderWeeksList();
-}
-
-// Wochenliste rendern
-function renderWeeksList(){
-    weeksList.innerHTML="";
-    const sorted = events.sort((a,b)=>a.date-b.date);
-    sorted.forEach(ev=>{
-        const item = document.createElement("div");
-        item.className=`week-item`;
-        item.innerHTML=`<div class="week-title">${ev.date.toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'numeric'})} <span class="tiny-muted">${ev.title}</span></div>`;
-        weeksList.appendChild(item);
-    });
-}
-
-// Hilfsfunktionen für Datum
-function nextWeekday(weekday, fromDate=new Date()){
-    const days = ['sonntag','montag','dienstag','mittwoch','donnerstag','freitag','samstag'];
-    const wd = days.indexOf(weekday.toLowerCase());
-    if(wd===-1) return null;
-    let d = new Date(fromDate);
-    let diff = (wd + 7 - d.getDay()) % 7;
-    if(diff===0) diff=7;
-    d.setDate(d.getDate() + diff);
-    return d;
-}
-
-function getAllWeekdaysInMonth(weekday,monthDate){
-    const days = [];
-    const firstDay = new Date(monthDate.getFullYear(), monthDate.getMonth(),1);
-    const lastDay = new Date(monthDate.getFullYear(), monthDate.getMonth()+1,0);
-    for(let d=1; d<=lastDay.getDate(); d++){
-        const date = new Date(monthDate.getFullYear(), monthDate.getMonth(),d);
-        if(date.toLocaleDateString('de-DE',{weekday:'long'}).toLowerCase().startsWith(weekday.toLowerCase())){
-            days.push(date);
-        }
-    }
-    return days;
-}
-
-function parseInput(input){
-    input = input.toLowerCase();
-    const type = typeSelect.value;
-    const today = new Date();
-
-    // "jeden [Wochentag]"
-    let match = input.match(/jeden\s+(\w+)/);
-    if(match){
-        let weekday = match[1];
-        if(input.includes("nächsten monat")){
-            const nextMonth = new Date(today.getFullYear(), today.getMonth()+1,1);
-            const days = getAllWeekdaysInMonth(weekday,nextMonth);
-            days.forEach(d=>addEvent(input,type,d));
-        } else {
-            // Aktueller Monat
-            const thisMonth = new Date(today.getFullYear(), today.getMonth(),1);
-            const days = getAllWeekdaysInMonth(weekday,thisMonth);
-            days.forEach(d=>addEvent(input,type,d));
-        }
-        return;
-    }
-
-    // "am [Wochentag]"
-    match = input.match(/am\s+(\w+)/);
-    if(match){
-        const weekday = match[1];
-        const d = nextWeekday(weekday);
-        addEvent(input,type,d);
-        return;
-    }
-
-    // "übermorgen", "morgen", "heute"
-    if(input.includes("übermorgen")){addEvent(input,type,new Date(today.getFullYear(),today.getMonth(),today.getDate()+2));return;}
-    if(input.includes("morgen")){addEvent(input,type,new Date(today.getFullYear(),today.getMonth(),today.getDate()+1));return;}
-    if(input.includes("heute")){addEvent(input,type,new Date(today.getFullYear(),today.getMonth(),today.getDate()));return;}
-
-    // "nächster [Wochentag]"
-    match = input.match(/nächsten\s+(\w+)/);
-    if(match){
-        const weekday = match[1];
-        const d = nextWeekday(weekday);
-        addEvent(input,type,d);
-        return;
-    }
-
-    // "die ganze woche" oder "in der woche" (werktage)
-    if(input.includes("die ganze woche") || input.includes("in der woche") || input.includes("alle werktage")){
-        const start = new Date(today);
-        start.setDate(start.getDate() - start.getDay() + 1); // Montag
-        for(let i=0;i<5;i++){
-            const d = new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
-            addEvent(input,type,d);
-        }
-        return;
-    }
-
-    // "am wochenende"
-    if(input.includes("am wochenende")){
-        const saturday = nextWeekday("samstag");
-        const sunday = nextWeekday("sonntag");
-        addEvent(input,type,saturday);
-        addEvent(input,type,sunday);
-        return;
-    }
-
-    // Wenn nur Wochentag ohne "am" oder "jeden"
-    match = input.match(/^(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/);
-    if(match){
-        const d = nextWeekday(match[0]);
-        addEvent(input,type,d);
-        return;
-    }
-
-    // Default: heute
-    addEvent(input,type,today);
-}
-
-// Event hinzufügen
-addEventBtn.addEventListener("click",()=>{
-    if(freeInput.value.trim()!==""){
-        parseInput(freeInput.value.trim());
-        freeInput.value="";
-    }
+/* ---------- Init ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  // restore theme
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  if(savedTheme) document.body.dataset.theme = savedTheme;
+  renderMonth(viewDate);
+  renderWeeks();
+  updateMonthTitle();
 });
 
-// Google Calendar Import
-googleImportBtn.addEventListener("click",()=>{
-    if(events.length===0) return;
-    let baseUrl = "https://www.google.com/calendar/render?action=TEMPLATE";
-    let fullUrl = baseUrl;
-    // Einfach alle Events hintereinander mit &text=Title&dates=YYYYMMDDTHHMMSSZ/YYYYMMDDTHHMMSSZ
-    // Für Demo, nur Datum heute mittags
-    events.forEach(ev=>{
-        const y = ev.date.getFullYear();
-        const m = String(ev.date.getMonth()+1).padStart(2,'0');
-        const d = String(ev.date.getDate()).padStart(2,'0');
-        const start = `${y}${m}${d}T120000Z`;
-        const end = `${y}${m}${d}T130000Z`;
-        fullUrl += `&text=${encodeURIComponent(ev.title)}&dates=${start}/${end}`;
-    });
-    window.open(fullUrl,"_blank");
+/* ---------- Theme toggle (persist) ---------- */
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const body = document.body;
+  const newTheme = body.dataset.theme === 'light' ? 'dark' : 'light';
+  body.dataset.theme = newTheme;
+  // store
+  localStorage.setItem(THEME_KEY, newTheme);
 });
 
-// Navigation
-prevMonthBtn.addEventListener("click",()=>{ currentDate.setMonth(currentDate.getMonth()-1); renderCalendar(currentDate); });
-nextMonthBtn.addEventListener("click",()=>{ currentDate.setMonth(currentDate.getMonth()+1); renderCalendar(currentDate); });
+/* ---------- Month navigation ---------- */
+document.getElementById('prevMonth').addEventListener('click', ()=>{ changeMonth(-1); });
+document.getElementById('nextMonth').addEventListener('click', ()=>{ changeMonth(1); });
 
-// Initial render
-renderCalendar(currentDate);
+function changeMonth(offset){
+  viewDate.setMonth(viewDate.getMonth() + offset);
+  renderMonth(viewDate);
+  updateMonthTitle();
+}
 
+/* ---------- Add / Clear ---------- */
+document.getElementById('addEventBtn').addEventListener('click', () => {
+  const raw = document.getElementById('freeInput').value.trim();
+  const type = document.getElementById('typeSelect').value;
+  if(!raw) return alert('Bitte Text eingeben.');
+
+  // parse can return array of events
+  const parsed = parseInputToEvent(raw, type);
+  if(!parsed || parsed.length === 0) return alert('Konnte keine Termine erkennen.');
+
+  // append and persist
+  events.push(...parsed);
+  saveEvents();
+  document.getElementById('freeInput').value = '';
+  renderMonth(viewDate);
+  renderWeeks();
+});
+
+/* "Kalender zurücksetzen" */
+document.getElementById('clearBtn').addEventListener('click', ()=> {
+  if(confirm('Alle Events löschen?')) {
+    events = [];
+    saveEvents();
+    renderMonth(viewDate);
+    renderWeeks();
+  }
+});
+
+/* ---------- Persistence ---------- */
+function saveEvents(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+}
+
+/* ---------- Rendering ---------- */
+
+function updateMonthTitle(){
+  const monthNames = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+  document.getElementById('monthTitle').textContent = `${monthNames[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
+}
+
+function renderMonth(date){
+  const grid = document.getElementById('calendarGrid');
+  grid.innerHTML = '';
+
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  // first day of month
+  const first = new Date(year, month, 1);
+  const startDay = first.getDay(); // 0..6 Sun..Sat
+  // convert to Monday-first index: leading empties
+  const leadingEmpty = (startDay + 6) % 7;
+
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+
+  // fill empties
+  for(let i=0;i<leadingEmpty;i++){
+    const d = document.createElement('div');
+    d.className = 'day';
+    d.style.opacity = 0.5;
+    grid.appendChild(d);
+  }
+
+  const weekDays = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+
+  for(let day=1; day<=daysInMonth; day++){
+    const cellDate = new Date(year, month, day);
+    const cell = document.createElement('div');
+    cell.className = 'day';
+
+    const dateNum = document.createElement('div');
+    dateNum.className = 'date-num';
+    const weekdayIndex = cellDate.getDay()===0?6:cellDate.getDay()-1;
+    dateNum.innerHTML = `${day}<span class="weekday">${weekDays[weekdayIndex]}</span>`;
+    cell.appendChild(dateNum);
+
+    // find events for this date (events stored as YYYY-MM-DD strings)
+    const iso = formatYMD(cellDate);
+    const dayEvents = events.filter(e => e.date === iso)
+                            .sort((a,b)=> timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+    // mark ganztag if any event has no startTime/endTime
+    const hasAllDay = dayEvents.some(e=> !e.startTime && !e.endTime);
+    if(hasAllDay) cell.classList.add('ganztag'); else cell.classList.remove('ganztag');
+
+    // render up to N pills, rest as "+n weitere"
+    const MAX_PILLS = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-pills-per-day')) || 2;
+    if(dayEvents.length){
+      for(let i=0;i<Math.min(MAX_PILLS, dayEvents.length); i++){
+        const ev = dayEvents[i];
+        const pill = document.createElement('div');
+        pill.className = 'event-pill ' + (ev.type === 'private' ? 'type-private' : (ev.type==='work' ? 'type-work' : 'type-default'));
+        const timeText = ev.startTime ? (ev.startTime + (ev.endTime ? ' - ' + ev.endTime : '')) : '';
+        // show small GC icon inside pill
+        pill.innerHTML = `<div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${timeText} ${escapeHtml(ev.title)}</div>
+                          <a class="gc-link" title="In Google Kalender öffnen" href="${generateGoogleCalendarUrl(ev)}" target="_blank" rel="noopener noreferrer">📅</a>`;
+        cell.appendChild(pill);
+      }
+      if(dayEvents.length > MAX_PILLS){
+        const more = document.createElement('div');
+        more.className = 'tiny-muted';
+        more.style.marginTop = '6px';
+        more.textContent = `+${dayEvents.length - MAX_PILLS} weitere`;
+        cell.appendChild(more);
+      }
+    }
+
+    // border color by type
+    if(dayEvents.some(e=> e.type==='private')) {
+      cell.style.border = '2px solid #d32f2f';
+    } else if(dayEvents.some(e=> e.type==='work')) {
+      cell.style.border = '2px solid #2e7d32';
+    } else if(dayEvents.length>0){
+      cell.style.border = '2px solid rgba(255,255,255,0.06)';
+    } else {
+      cell.style.border = '1px solid rgba(255,255,255,0.04)';
+    }
+
+    grid.appendChild(cell);
+  }
+}
+
+/* Render weekly grouped list (next 8 weeks) */
+function renderWeeks(){
+  const container = document.getElementById('weeksList');
+  container.innerHTML = '';
+
+  const today = startOfDay(new Date());
+  const weeks = [];
+
+  // next 8 weeks
+  for(let w=0; w<8; w++){
+    const start = addDays(startOfWeek(today), w*7);
+    const end = addDays(start, 6);
+    const evs = events.filter(e => {
+      const d = parseYMD(e.date);
+      return d >= start && d <= end;
+    }).sort((a,b)=> (new Date(a.date + 'T' + (a.startTime||'00:00'))) - (new Date(b.date + 'T' + (b.startTime||'00:00'))));
+
+    if(evs.length>0){
+      weeks.push({start, end, events: evs});
+    }
+  }
+
+  // cap total displayed events to avoid long lists
+  const MAX_WEEK_EVENTS = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-weeklist-events')) || 50;
+  let totalShown = 0;
+
+  weeks.forEach(wk=>{
+    if(totalShown >= MAX_WEEK_EVENTS) return;
+    const item = document.createElement('div');
+    item.className = 'week-item';
+    const title = document.createElement('div');
+    title.className = 'week-title';
+    title.innerHTML = `<div>${formatShort(wk.start)} — ${formatShort(wk.end)}</div><div class="tiny-muted">${wk.events.length} Termine</div>`;
+    item.appendChild(title);
+
+    for(const ev of wk.events){
+      if(totalShown >= MAX_WEEK_EVENTS) break;
+      const row = document.createElement('div');
+      row.className = 'event-row ' + (ev.type === 'private' ? 'private' : (ev.type==='work' ? 'work' : 'default'));
+      const timeText = ev.startTime ? (ev.startTime + (ev.endTime ? ' - ' + ev.endTime : '')) : '';
+      row.innerHTML = `<div style="font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${timeText} ${escapeHtml(ev.title)}</div>
+                       <div class="tiny-muted">${formatDayTime(ev.date, ev.startTime)}</div>`;
+      // click opens GC for that event
+      row.addEventListener('click', ()=> {
+        window.open(generateGoogleCalendarUrl(ev), '_blank', 'noopener');
+      });
+      item.appendChild(row);
+      totalShown++;
+    }
+
+    container.appendChild(item);
+  });
+
+  if(weeks.length===0 || totalShown===0){
+    container.innerHTML = `<div class="tiny-muted">Keine kommenden Termine.</div>`;
+  }
+}
+
+/* ---------- Parsing: robust, supports many phrases ---------- */
+/*
+  Returns array of event objects:
+  { id, date: 'YYYY-MM-DD', title, startTime, endTime, type }
+*/
+function parseInputToEvent(text, type='default'){
+  // Normalize
+  let t = (text || '').trim();
+  if(!t) return [];
+  let originalText = t;
+  t = t.toLowerCase();
+
+  const now = new Date();
+  const today = startOfDay(now);
+  const eventsOut = [];
+
+  // Helper: push event (Date or date-string)
+  function pushEventFromDate(d, title, sTime='', eTime=''){
+    const dt = (d instanceof Date) ? startOfDay(d) : startOfDay(parseYMD(d));
+    eventsOut.push({
+      id: 'ev_' + Math.random().toString(36).slice(2,9),
+      date: formatYMD(dt),
+      title: title || originalText,
+      startTime: sTime || '',
+      endTime: eTime || '',
+      type: type
+    });
+  }
+
+  // 1) time detection (ranges like 18-20 or 18:30-20:00) and "um 18" patterns
+  let startTime = '', endTime = '';
+  const timeRange = t.match(/(\d{1,2}(?::\d{2})?)\s*[-–]\s*(\d{1,2}(?::\d{2})?)/);
+  if(timeRange){
+    startTime = normalizeTime(timeRange[1]);
+    endTime = normalizeTime(timeRange[2]);
+    t = t.replace(timeRange[0], '').trim();
+  } else {
+    const around = t.match(/um\s+(\d{1,2}(?::\d{2})?)/);
+    if(around){
+      startTime = normalizeTime(around[1]);
+      endTime = addHourToTime(startTime, 1);
+      t = t.replace(around[0], '').trim();
+    }
+  }
+
+  // 2) check for explicit date (dd/mm/yyyy or dd.mm.yyyy)
+  const explicitDateMatch = t.match(/(\d{1,2}[\.\/]\d{1,2}[\.\/]\d{2,4})/);
+  if(explicitDateMatch){
+    const parsed = parseDateString(explicitDateMatch[1]);
+    if(parsed) {
+      // Remove date token
+      t = t.replace(explicitDateMatch[0], '').trim();
+      pushEventFromDate(parsed, t || originalText, startTime, endTime);
+      return eventsOut;
+    }
+  }
+
+  // 3) special words & patterns
+  // weekend keywords: "am wochenende" or standalone "wochenende"
+  if(/\b(am\s+)?wochenende\b/.test(t)){
+    // ensure we always pick upcoming Saturday & Sunday (the next weekend)
+    const nextSat = nextWeekdayFrom(today, 'samstag'); // returns Sat >= today? returns next occurrence
+    const nextSun = nextWeekdayFrom(today, 'sonntag');
+    pushEventFromDate(nextSat, t || originalText, startTime, endTime);
+    pushEventFromDate(nextSun, t || originalText, startTime, endTime);
+    return eventsOut;
+  }
+
+  // words for today/morgen/übermorgen
+  if(/\bübermorgen\b/.test(t)){
+    pushEventFromDate(addDays(today,2), t.replace(/\bübermorgen\b/,'').trim() || originalText, startTime, endTime);
+    return eventsOut;
+  }
+  if(/\bmorgen\b/.test(t)){
+    pushEventFromDate(addDays(today,1), t.replace(/\bmorgen\b/,'').trim() || originalText, startTime, endTime);
+    return eventsOut;
+  }
+  if(/\bheute\b/.test(t)){
+    pushEventFromDate(today, t.replace(/\bheute\b/,'').trim() || originalText, startTime, endTime);
+    return eventsOut;
+  }
+
+  // "nächste woche [Wochentag]" or "nächste woche jeden [Wochentag]"
+  let m;
+  if((m = t.match(/nächste\s+woche(?:\s+jeden)?\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/))){
+    const wd = m[1];
+    const startNextWeek = addDays(startOfWeek(today), 7);
+    const dateFound = nextWeekdayFrom(startNextWeek, wd);
+    pushEventFromDate(dateFound, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+    return eventsOut;
+  }
+
+  // "jeden X im (diesem|aktuellen) monat" or "jeden X im nächsten monat"
+  if((m = t.match(/jeden\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)(?:\s+im\s+(diesem|aktuellen|nächsten)\s+monat)?/))){
+    const weekdayName = m[1];
+    const monthQualifier = m[2]; // may be undefined
+    let targetMonthDate;
+    if(monthQualifier && /nächsten/i.test(monthQualifier)){
+      targetMonthDate = new Date(today.getFullYear(), today.getMonth()+1, 1);
+    } else {
+      // default: current month
+      targetMonthDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    }
+    // get all occurrences of that weekday inside that month
+    const days = getAllWeekdaysInMonth(weekdayName, targetMonthDate);
+    for(const d of days){
+      // if target month is current one and date < today => maybe include only future dates?
+      // The user asked "im aktuellen Monat" -> include all in that month (even past?) — we interpret as all days in month (but to be practical, include only days >= today)
+      if(targetMonthDate.getMonth() === today.getMonth()){
+        if(d >= today) pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+      } else {
+        // next month -> include all in next month
+        pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+      }
+    }
+    return eventsOut;
+  }
+
+  // "jeden X" (repeat weekly for future weeks) - default behaviour: create repeated entries for next 16 weeks
+  if((m = t.match(/jeden\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/))){
+    const weekdayName = m[1];
+    // create occurrences for next 16 occurrences (configurable)
+    let count = 16;
+    let base = today;
+    for(let i=0;i<count;i++){
+      const candidate = nextWeekdayFrom(addDays(base, i*7), weekdayName);
+      if(candidate) pushEventFromDate(candidate, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+    }
+    return eventsOut;
+  }
+
+  // "in der woche" / "die ganze woche" / "alle werktage"
+  if(/\b(die ganze woche|in der woche|alle werktage|werktage|woche)\b/.test(t)){
+    // By default interpret as current week (Mon-Fri)
+    const start = startOfWeek(today);
+    for(let i=0;i<5;i++){
+      pushEventFromDate(addDays(start, i), t.replace(/\b(die ganze woche|in der woche|alle werktage|werktage|woche)\b/,'').trim() || originalText, startTime, endTime);
+    }
+    return eventsOut;
+  }
+
+  // "am nächsten <weekday>" OR "nächsten <weekday>" OR "nächster <weekday>"
+  if((m = t.match(/\b(am\s+)?nächs(?:te|ter|ten)\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/))){
+    const weekdayName = m[2];
+    // next weekday after today (not today)
+    const d = nextWeekdayFrom(today, weekdayName);
+    pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+    return eventsOut;
+  }
+
+  // bare "am <weekday>" or "<weekday> laufen" etc. -> next occurrence (if today is the day, choose next occurrence?)
+  if((m = t.match(/\b(am\s+)?(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/))){
+    const weekdayName = m[2];
+    const d = nextWeekdayFrom(today, weekdayName);
+    pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+    return eventsOut;
+  }
+
+  // month phrases: "diesen monat", "im aktuellen monat", "nächsten monat"
+  if(/\b(dieser monat|diesen monat|im aktuellen monat|aktuellen monat)\b/.test(t)){
+    // interpret as every day of current month? or used with "jeden X" earlier.
+    // We'll treat "die ganze monat" as every day of current month when used alone
+    const start = new Date(today.getFullYear(), today.getMonth(), 1);
+    const end = new Date(today.getFullYear(), today.getMonth()+1, 0);
+    for(let d = start.getDate(); d<=end.getDate(); d++){
+      const dt = new Date(start.getFullYear(), start.getMonth(), d);
+      if(dt >= today) pushEventFromDate(dt, t.replace(/\b(dieser monat|diesen monat|im aktuellen monat|aktuellen monat)\b/,'').trim() || originalText, startTime, endTime);
+    }
+    return eventsOut;
+  }
+  if(/\b(nächster monat|im nächsten monat|nächsten monat)\b/.test(t)){
+    const start = new Date(today.getFullYear(), today.getMonth()+1, 1);
+    const end = new Date(start.getFullYear(), start.getMonth()+1, 0);
+    for(let d = start.getDate(); d<=end.getDate(); d++){
+      const dt = new Date(start.getFullYear(), start.getMonth(), d);
+      pushEventFromDate(dt, t.replace(/\b(nächster monat|im nächsten monat|nächsten monat)\b/,'').trim() || originalText, startTime, endTime);
+    }
+    return eventsOut;
+  }
+
+  // If nothing matched: fallback -> next occurrence or today
+  // If phrase contains a weekday word implicitly, capture it
+  if((m = t.match(/\b(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/))){
+    const weekdayName = m[1];
+    const d = nextWeekdayFrom(today, weekdayName);
+    pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+    return eventsOut;
+  }
+
+  // Fallback: place on today
+  pushEventFromDate(today, t || originalText, startTime, endTime);
+  return eventsOut;
+}
+
+/* ---------- Helper Utilities ---------- */
+
+function escapeHtml(text){
+  if(!text) return '';
+  return String(text).replace(/[&<>"'`=\/]/g, function(s) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'}[s];
+  });
+}
+
+function formatYMD(d){
+  const dt = new Date(d);
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth()+1).padStart(2,'0');
+  const day = String(dt.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function parseYMD(s){
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y,m-1,d);
+}
+function formatShort(date){
+  const d = new Date(date);
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const yyyy = d.getFullYear();
+  return `${dd}.${mm}.${yyyy}`;
+}
+function formatDayTime(dateStr, timeStr){
+  const d = new Date(dateStr);
+  const day = d.toLocaleDateString('de-DE',{weekday:'short', day:'2-digit', month:'short'});
+  return timeStr ? `${day} • ${timeStr}` : `${day}`;
+}
+function startOfDay(date){ const d = new Date(date); d.setHours(0,0,0,0); return d; }
+function startOfWeek(date){ // Monday as first
+  const d = new Date(date);
+  const day = d.getDay() || 7;
+  d.setDate(d.getDate() - day + 1);
+  return startOfDay(d);
+}
+function addDays(d, days){ const x = new Date(d); x.setDate(x.getDate() + days); return startOfDay(x); }
+function timeToMinutes(t){ if(!t) return 0; const [hh,mm] = t.split(':').map(s=>parseInt(s||'0',10)); return hh*60 + mm; }
+
+/* parse dd.mm.yyyy or dd/mm/yyyy into Date */
+function parseDateString(s){
+  const cleaned = s.replace(/\./g,'/'); // normalize
+  const parts = cleaned.split('/');
+  if(parts.length===3){
+    let dd = parseInt(parts[0],10), mm = parseInt(parts[1],10), yy = parseInt(parts[2],10);
+    if(yy < 100) yy = 2000 + yy;
+    return new Date(yy, mm-1, dd);
+  }
+  return null;
+}
+
+/* time normalizers */
+function normalizeTime(t){
+  if(!t) return '';
+  const cleaned = String(t).replace('.',':');
+  if(/^\d{1,2}$/.test(cleaned)) return cleaned.padStart(2,'0') + ':00';
+  if(/^\d{1,2}:\d{1,2}$/.test(cleaned)){
+    const [hh,mm] = cleaned.split(':');
+    return hh.padStart(2,'0') + ':' + mm.padStart(2,'0');
+  }
+  return '';
+}
+function addHourToTime(t, h){
+  if(!t) return '';
+  const [hh,mm] = t.split(':').map(Number);
+  const d = new Date();
+  d.setHours(hh + h, mm || 0, 0, 0);
+  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+
+/* get all weekdays inside a month (weekday: 'montag', 'dienstag', ...) */
+function getAllWeekdaysInMonth(weekdayName, monthDate){
+  const days = [];
+  const first = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
+  const last = new Date(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
+  const wdMap = {montag:1,dienstag:2,mittwoch:3,donnerstag:4,freitag:5,samstag:6,sonntag:0};
+  const target = wdMap[weekdayName.toLowerCase()];
+  if(target === undefined) return days;
+  for(let d=1; d<=last.getDate(); d++){
+    const curr = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
+    if(curr.getDay() === target) days.push(startOfDay(curr));
+  }
+  return days;
+}
+
+/* nextWeekdayFrom: return next occurrence of weekdayName (e.g. 'donnerstag') starting from given date (strictly after if fromDate is same day) */
+function nextWeekdayFrom(fromDate, weekdayName){
+  const wdMap = {montag:1,dienstag:2,mittwoch:3,donnerstag:4,freitag:5,samstag:6,sonntag:0};
+  const target = wdMap[weekdayName.toLowerCase()];
+  if(target === undefined) return null;
+  const d = new Date(fromDate);
+  d.setHours(0,0,0,0);
+  let delta = (target - d.getDay() + 7) % 7;
+  if(delta === 0) delta = 7; // next occurrence, not today
+  d.setDate(d.getDate() + delta);
+  return startOfDay(d);
+}
+
+/* ---------- Google Calendar URL generator ---------- */
+function generateGoogleCalendarUrl(ev){
+  // ev.date = 'YYYY-MM-DD', ev.startTime 'HH:MM', ev.endTime 'HH:MM'
+  // Format for Google: YYYYMMDDTHHMMSSZ (we append Z but do not adjust TZ)
+  const formatForUrl = (s) => s.replace(/[-:]/g,'') + 'Z';
+  const startStr = formatForUrl(ev.date + 'T' + (ev.startTime ? ev.startTime.replace(':','') + '00' : '000000'));
+  const endStr = formatForUrl(ev.date + 'T' + (ev.endTime ? ev.endTime.replace(':','') + '00' : '010000'));
+  const text = encodeURIComponent(ev.title);
+  const details = encodeURIComponent('Erstellt via MEIN KALENDAR');
+  return `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${startStr}/${endStr}&details=${details}`;
+}
+
+/* ---------- Google Import Button: open each event in new tab (user-initiated click) ---------- */
+document.getElementById('googleImportBtn').addEventListener('click', () => {
+  if(!events || events.length === 0) return alert('Keine Events zum Exportieren.');
+  // limit export to first 200 to avoid popup issues
+  const limit = 200;
+  const toExport = events.slice(0, limit);
+  // open each in its own tab (may trigger popup blocker if too many)
+  for(const ev of toExport){
+    const url = generateGoogleCalendarUrl(ev);
+    window.open(url, '_blank', 'noopener');
+  }
+  if(events.length > limit) alert(`Es wurden ${limit} Einträge geöffnet. Weitere ${events.length - limit} wurden nicht geöffnet (Limit).`);
+});
+
+/* ---------- Utility: ensure month renders after edits ---------- */
 </script>
+
 </body>
 </html>
-

@@ -5,22 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>MEIN KALENDER — Vollversion</title>
 
-<!-- Spartan Font -->
+<!-- Spartan Font (gewünschte Bold verfügbar) -->
 <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
+  --gold: #FFD700;
   --bordeaux: #800020;
-  --bordeaux-strong:#6b0018;
   --white:#ffffff;
   --black:#000000;
   --glass: rgba(255,255,255,0.10);
-  --glass-dark: rgba(0,0,0,0.45);
+  --glass-dark: rgba(0,0,0,0.60);
   --radius: 12px;
   --shadow: 0 6px 20px rgba(0,0,0,0.18);
-  --accent-trans: rgba(128,0,32,0.18);
+  --accent-trans: rgba(255,215,0,0.12);
   --max-pills-per-day: 2;
-  --max-weeklist-events: 80;
+  --max-weeklist-events: 120;
   --spartan: 'Spartan', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
@@ -36,7 +36,7 @@
   --text: #111;
 }
 
-/* base */
+/* BASE */
 html,body{
   height:100%;
   margin:0;
@@ -47,8 +47,6 @@ html,body{
   background-color: var(--bg, #f7f7f7);
   color: var(--text, #111);
 }
-
-/* Layout mostly preserved from your original */
 body{
   background: url('hintergrund.jpg') center/cover no-repeat fixed;
   display:flex;
@@ -58,6 +56,7 @@ body{
   transition: background-color .25s ease;
 }
 
+/* Layout */
 .app {
   width:95%;
   max-width:980px;
@@ -68,6 +67,7 @@ body{
   gap:18px;
 }
 
+/* Header */
 header.app-header {
   grid-column: 1/3;
   display:flex;
@@ -81,36 +81,14 @@ header.app-header {
   backdrop-filter: blur(6px);
   position:relative;
 }
-
-header .title {
-  font-size:18px;
-  font-weight:700;
-  letter-spacing:1px;
-  color:var(--text);
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+header .title { font-size:18px; font-weight:700; letter-spacing:1px; color:var(--text); display:flex; align-items:center; gap:10px; }
 
 /* google import gold arrow */
-.google-import {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
-  padding:6px 8px;
-  border-radius:8px;
-  transition: transform .08s ease;
-}
+.google-import { display:flex; align-items:center; gap:8px; cursor:pointer; padding:6px 8px; border-radius:8px; transition: transform .08s ease; color:var(--text); }
 .google-import:hover { transform: translateY(-2px); }
 
 /* controls */
-.controls {
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-
+.controls { display:flex; gap:10px; align-items:center; }
 .control-btn {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.08);
@@ -122,41 +100,13 @@ header .title {
 }
 
 /* calendar left */
-.calendar-card {
-  background:var(--panel);
-  border-radius:14px;
-  padding:14px;
-  box-shadow:var(--shadow);
-  min-height:420px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  border: 1px solid rgba(0,0,0,0.04);
-}
-
-.month-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
+.calendar-card { background:var(--panel); border-radius:14px; padding:14px; box-shadow:var(--shadow); min-height:420px; display:flex; flex-direction:column; gap:12px; border: 1px solid rgba(0,0,0,0.04); }
+.month-header { display:flex; justify-content:space-between; align-items:center; }
 .month-title { font-size:18px; font-weight:700; color:var(--text); }
-.nav-btn {
-  background:transparent;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.06);
-  padding:6px 10px;
-  cursor:pointer;
-  color:var(--text);
-}
+.nav-btn { background:transparent; border-radius:10px; border:1px solid rgba(255,255,255,0.06); padding:6px 10px; cursor:pointer; color:var(--text); }
 
 /* calendar grid */
-.calendar-grid {
-  display:grid;
-  grid-template-columns: repeat(7,1fr);
-  gap:8px;
-}
-
+.calendar-grid { display:grid; grid-template-columns: repeat(7,1fr); gap:8px; }
 .day {
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border-radius:10px;
@@ -171,18 +121,17 @@ header .title {
   transition: transform .12s ease;
   overflow:hidden;
 }
-
 .day:hover { transform: translateY(-4px); }
-
 .day .date-num { font-size:13px; font-weight:700; display:flex; flex-direction:column; }
-.day .weekday { font-size:10px; font-weight:400; opacity:0.6; margin-top:3px; }
+.day .weekday { font-size:10px; font-weight:600; opacity:0.65; margin-top:4px; }
 
-/* event pill */
+/* event pill - very small text as requested */
 .event-pill {
   margin-top:auto;
-  padding:6px 8px;
-  border-radius:10px;
-  font-size:12px;
+  padding:4px 6px;
+  border-radius:8px;
+  font-size:11px;
+  line-height:1;
   background: rgba(255,255,255,0.06);
   color:var(--text);
   border-left:6px solid rgba(255,255,255,0.08);
@@ -196,205 +145,117 @@ header .title {
   text-overflow:ellipsis;
 }
 
-/* small GC icon */
-.event-pill .gc-link {
-  font-size:12px;
-  color:var(--bordeaux);
-  cursor:pointer;
-  margin-left:6px;
-  text-decoration:none;
-}
+/* GC icon inside pill */
+.event-pill .gc-link { font-size:12px; color:var(--bordeaux); cursor:pointer; margin-left:6px; text-decoration:none; }
 
-/* Colors (default palette) */
-.palette-dot { width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,0.1); }
+/* palette-dot small dots for indicating color */
+.palette-dot { width:12px; height:12px; border-radius:50%; display:inline-block; border:1px solid rgba(0,0,0,0.08); }
 
-/* highlight for ganztag */
-.day.ganztag {
-  background: linear-gradient(180deg, rgba(128,0,32,0.08), rgba(128,0,32,0.03));
-  border: 2px solid var(--bordeaux-strong);
-}
+/* ganztag highlight */
+.day.ganztag { background: linear-gradient(180deg, rgba(255,215,0,0.06), rgba(255,215,0,0.03)); border: 2px solid rgba(255,215,0,0.25); }
 
 /* right column */
-.side-card {
-  background:var(--panel);
-  border-radius:14px;
-  padding:12px;
-  box-shadow:var(--shadow);
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
+.side-card { background:var(--panel); border-radius:14px; padding:12px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px; }
 .input-row { display:flex; gap:8px; align-items:center; }
-.input-row input[type="text"]{
-  flex:1;
-  padding:10px 12px;
-  border-radius:10px;
-  border: none;
-  outline:none;
-  background: rgba(255,255,255,0.03);
-  color:var(--text);
-  font-weight:700;
-}
-.small-select {
-  padding:8px 10px;
-  background: transparent;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.06);
-  color:var(--text);
-  font-weight:600;
-}
-.icon-btn {
-  padding:8px 10px;
-  border-radius:10px;
-  background:var(--bordeaux);
-  color:var(--white);
-  border:none;
-  cursor:pointer;
-  font-weight:700;
-}
+.input-row input[type="text"]{ flex:1; padding:10px 12px; border-radius:10px; border: none; outline:none; background: rgba(255,255,255,0.03); color:var(--text); font-weight:700; font-size:14px; }
+.small-select { padding:8px 10px; background: transparent; border-radius:10px; border:1px solid rgba(255,255,255,0.06); color:var(--text); font-weight:600; }
+.icon-btn { padding:8px 10px; border-radius:10px; background:var(--bordeaux); color:var(--white); border:none; cursor:pointer; font-weight:700; }
 
 /* weeks list */
-.weeks-list {
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  max-height:420px;
-  overflow:auto;
-}
+.weeks-list { display:flex; flex-direction:column; gap:8px; max-height:420px; overflow:auto; }
+.week-item { border-radius:10px; padding:10px; background: rgba(255,255,255,0.02); display:flex; flex-direction:column; gap:8px; border:1px solid rgba(255,255,255,0.03); }
+.week-title { font-weight:700; color:var(--text); display:flex; justify-content:space-between; align-items:center; }
+.event-row { display:flex; justify-content:space-between; gap:10px; padding:6px 8px; border-radius:8px; background: rgba(255,255,255,0.01); align-items:center; border-left: 6px solid rgba(255,255,255,0.03); cursor:pointer; }
 
-.week-item {
-  border-radius:10px;
-  padding:10px;
-  background: rgba(255,255,255,0.02);
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  border:1px solid rgba(255,255,255,0.03);
-}
-.week-title {
-  font-weight:700;
-  color:var(--text);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.event-row {
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:6px 8px;
-  border-radius:8px;
-  background: rgba(255,255,255,0.01);
-  align-items:center;
-  border-left: 6px solid rgba(255,255,255,0.03);
-  cursor:pointer;
-}
-.event-row.private { border-left-color: #d32f2f; }
-.event-row.work    { border-left-color: #2e7d32; }
-.event-row.default { border-left-color: rgba(255,255,255,0.06); }
+/* color-popup (small circles horizontally) */
+.color-popup { position:absolute; z-index:9999; background:var(--panel); padding:8px; border-radius:8px; box-shadow: 0 6px 20px rgba(0,0,0,0.18); display:flex; gap:8px; align-items:center; }
+.color-circle { width:22px; height:22px; border-radius:50%; border:2px solid rgba(255,255,255,0.12); cursor:pointer; box-shadow:0 1px 0 rgba(0,0,0,0.05); }
 
-.tiny-muted { font-size:12px; opacity:0.7; }
-
-/* color-picker popup */
-.color-popup {
-  position: absolute;
-  z-index: 9999;
-  background: var(--panel);
-  padding:8px;
-  border-radius:8px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
-  display:flex;
-  gap:8px;
-}
-
-/* mobile long-press hint */
+/* footer hints */
 .longpress-hint { font-size:11px; opacity:0.7; }
 
 /* responsive */
 @media (max-width:980px){
   .app { grid-template-columns: 1fr; }
   .google-import .label { display:none; }
+  .calendar-grid { gap:6px; }
+  .day { min-height:68px; }
 }
 </style>
 </head>
 <body data-theme="light">
-
-  <div class="app">
-    <header class="app-header">
-      <div class="title">
-        MEIN KALENDER
-        <div id="googleImportBtn" class="google-import" title="An dein Google Kalender importieren" aria-label="An dein Google Kalender importieren">
-          <!-- golden upwards arrow -->
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 1px 0 rgba(0,0,0,0.1));">
-            <path d="M12 2v16" stroke="#FFD700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M6 8l6-6 6 6" stroke="#FFD700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <rect x="3" y="18" width="18" height="3" rx="1.2" fill="#FFD700" />
-          </svg>
-          <span class="label">An dein Google Kalender importieren</span>
-        </div>
+<div class="app">
+  <header class="app-header">
+    <div class="title">
+      MEIN KALENDER — Vollversion
+      <div id="googleImportBtn" class="google-import" title="An dein Google Kalender importieren" aria-label="An dein Google Kalender importieren" role="button" tabindex="0" style="margin-left:8px;">
+        <!-- golden upwards arrow -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 1px 0 rgba(0,0,0,0.08));">
+          <path d="M12 2v16" stroke="#FFD700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 8l6-6 6 6" stroke="#FFD700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="3" y="18" width="18" height="3" rx="1.2" fill="#FFD700" />
+        </svg>
+        <span class="label">An dein Google Kalender importieren</span>
       </div>
-      <div class="controls">
-        <button id="themeToggle" class="control-btn" title="Theme umschalten">🌙 / ☀</button>
-        <button id="pushToggle" class="control-btn" title="Benachrichtigungen (später)">🔔</button>
+    </div>
+
+    <div class="controls">
+      <button id="themeToggle" class="control-btn" title="Theme umschalten">🌙 / ☀</button>
+      <button id="pushToggle" class="control-btn" title="Benachrichtigungen (später)">🔔</button>
+    </div>
+  </header>
+
+  <!-- calendar left -->
+  <section class="calendar-card" id="calendarCard">
+    <div class="month-header">
+      <button class="nav-btn" id="prevMonth">◀</button>
+      <div class="month-title" id="monthTitle">Oktober 2025</div>
+      <button class="nav-btn" id="nextMonth">▶</button>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </section>
+
+  <!-- right: input & weeks -->
+  <aside class="side-card">
+    <div>
+      <div class="input-row">
+        <input id="freeInput" type="text" placeholder="z.B. 'jeden Montag 18-19 Sport' oder 'übermorgen schlafen'">
+        <select id="typeSelect" class="small-select" title="Farbe/Typ">
+          <option value="default">Standard</option>
+          <option value="private">Privat</option>
+          <option value="work">Arbeit</option>
+        </select>
+        <button id="micBtn" class="icon-btn" title="Spracheingabe starten">🎙</button>
       </div>
-    </header>
-
-    <!-- left: calendar -->
-    <section class="calendar-card" id="calendarCard">
-      <div class="month-header">
-        <button class="nav-btn" id="prevMonth">◀</button>
-        <div class="month-title" id="monthTitle">Oktober 2025</div>
-        <button class="nav-btn" id="nextMonth">▶</button>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button id="addEventBtn" class="icon-btn" style="background:var(--gold); color:#111; font-weight:800;">Hinzufügen</button>
+        <button id="clearBtn" class="control-btn">Kalender zurücksetzen</button>
+        <button id="icsExportBtn" class="control-btn" title="Exportiere als .ics">.ics export</button>
       </div>
+      <div class="longpress-hint" style="margin-top:6px;">Rechtsklick (oder langes Drücken) auf ein Termin-Pill zum Ändern der Farbe</div>
+    </div>
 
-      <div class="calendar-grid" id="calendarGrid"></div>
-    </section>
-
-    <!-- right: input & weeks -->
-    <aside class="side-card">
-      <div>
-        <div class="input-row">
-          <input id="freeInput" type="text" placeholder="z.B. jeden Montag 18-19 Sport">
-          <select id="typeSelect" class="small-select" title="Farbe/Typ">
-            <option value="default">Standard</option>
-            <option value="private">Privat</option>
-            <option value="work">Arbeit</option>
-          </select>
-          <button id="micBtn" class="icon-btn" title="Spracheingabe starten">🎙</button>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button id="addEventBtn" class="icon-btn" style="background:var(--bordeaux)">Hinzufügen</button>
-          <button id="clearBtn" class="control-btn">Kalender zurücksetzen</button>
-          <button id="icsExportBtn" class="control-btn" title="Exportiere als .ics">.ics export</button>
-        </div>
-        <div class="longpress-hint" style="margin-top:6px;">Rechtsklick (oder langes Drücken auf Mobilgerät) auf ein Event, um die Farbe zu ändern</div>
-      </div>
-
-      <div>
-        <div style="font-weight:700;margin-bottom:8px;">Kommende Wochen</div>
-        <div class="weeks-list" id="weeksList"></div>
-      </div>
-    </aside>
-  </div>
-
-<!-- Color palette (hidden) -->
-<div id="colorPopup" class="color-popup" style="display:none;">
-  <!-- Palette items will be injected -->
+    <div>
+      <div style="font-weight:700;margin-bottom:8px;">Kommende Wochen</div>
+      <div class="weeks-list" id="weeksList"></div>
+    </div>
+  </aside>
 </div>
 
+<!-- color popup container -->
+<div id="colorPopup" class="color-popup" style="display:none;position:fixed;"></div>
+
 <script>
-/* ===============================
-  Full JS implementation inline
-  - parser, speech, color picker
-  - .ics export, Google export
-  - persistence (localStorage)
-  - performance guards
-   =============================== */
+/* -------------------------
+  Block 2: Parser + Speech + Audio + Helpers
+---------------------------*/
 
-const STORAGE_KEY = 'mein_kalender_events_v_final_v2';
-const THEME_KEY = 'mein_kalender_theme_v2';
+/* STORAGE KEYS */
+const STORAGE_KEY = 'mein_kalender_events_v_final_v3';
+const THEME_KEY = 'mein_kalender_theme_v3';
 
-/* Default color palette (user can choose one) */
+/* COLOR PALETTE */
 const COLOR_PALETTE = [
   {name:'Blau', hex:'#1976D2'},
   {name:'Grün', hex:'#2E7D32'},
@@ -406,24 +267,13 @@ const COLOR_PALETTE = [
   {name:'Grau', hex:'#616161'}
 ];
 
-/* Load events from storage (array of objects) */
+/* EVENTS (rehydrate) */
 let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-/* event structure:
-{
- id: 'ev_xxx',
- groupId: 'grp_xxx' or null,
- date: 'YYYY-MM-DD',
- title: 'Text',
- startTime: 'HH:MM' or '',
- endTime: 'HH:MM' or '',
- type: 'default'|'private'|'work',
- color: '#hex' (optional)
-}
-*/
 
-let viewDate = new Date(); // which month to show
+/* view state */
+let viewDate = new Date();
 
-/* --- DOM refs --- */
+/* DOM refs (used in Block 3 too) */
 const calendarGrid = document.getElementById('calendarGrid');
 const monthTitle = document.getElementById('monthTitle');
 const prevMonthBtn = document.getElementById('prevMonth');
@@ -438,199 +288,147 @@ const clearBtn = document.getElementById('clearBtn');
 const icsExportBtn = document.getElementById('icsExportBtn');
 const colorPopup = document.getElementById('colorPopup');
 
-/* --- Init --- */
-document.addEventListener('DOMContentLoaded', () => {
-  // Restore theme
-  const savedTheme = localStorage.getItem(THEME_KEY);
-  if(savedTheme) document.body.dataset.theme = savedTheme;
-  updateMonthTitle();
-  renderMonth(viewDate);
-  renderWeeks();
+/* ---------- Helpers ---------- */
+function startOfDay(d){ const x = new Date(d); x.setHours(0,0,0,0); return x; }
+function addDays(d, days){ const x = new Date(d); x.setDate(x.getDate() + days); return startOfDay(x); }
+function startOfWeek(d){ const x = new Date(d); const day = x.getDay() || 7; x.setDate(x.getDate() - day + 1); return startOfDay(x); }
+function endOfMonth(d){ const x = new Date(d.getFullYear(), d.getMonth()+1, 0); return startOfDay(x); }
+function formatYMD(d){ const dt = new Date(d); const y = dt.getFullYear(); const m = String(dt.getMonth()+1).padStart(2,'0'); const day = String(dt.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; }
+function parseYMD(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
+function formatShort(date){ const d = new Date(date); return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}`; }
+function formatDayTime(dateStr, timeStr){ const d = new Date(dateStr); const day = d.toLocaleDateString('de-DE',{weekday:'short', day:'2-digit', month:'short'}); return timeStr ? `${day} • ${timeStr}` : `${day}`; }
+function timeToMinutes(t){ if(!t) return 0; const [hh,mm] = t.split(':').map(s=>parseInt(s||'0',10)); return hh*60 + mm; }
+function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"'\/=]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','=':'&#x3D;'}[c]; }); }
+
+/* normalize time strings */
+function normalizeTime(t){
+  if(!t) return '';
+  const cleaned = String(t).replace('.',':');
+  if(/^\d{1,2}$/.test(cleaned)) return cleaned.padStart(2,'0') + ':00';
+  if(/^\d{1,2}:\d{1,2}$/.test(cleaned)){
+    const [hh,mm] = cleaned.split(':');
+    return hh.padStart(2,'0') + ':' + mm.padStart(2,'0');
+  }
+  return '';
+}
+function addHourToTime(t,h){
+  if(!t) return '';
+  const [hh,mm] = t.split(':').map(Number);
+  const d = new Date(); d.setHours(hh + h, mm || 0, 0, 0);
+  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+
+/* weekday map (JS: Sun=0..Sat=6) */
+const WD_MAP = {montag:1,dienstag:2,mittwoch:3,donnerstag:4,freitag:5,samstag:6,sonntag:0};
+
+/* nextWeekdayFrom: finds next occurrence AFTER fromDate (if same weekday -> next one) */
+function nextWeekdayFrom(fromDate, weekdayName){
+  const target = WD_MAP[weekdayName.toLowerCase()];
+  if(target === undefined) return null;
+  const d = new Date(fromDate);
+  d.setHours(0,0,0,0);
+  let delta = (target - d.getDay() + 7) % 7;
+  if(delta === 0) delta = 7; // always next occurrence
+  d.setDate(d.getDate() + delta);
+  return startOfDay(d);
+}
+
+/* getAllWeekdaysInMonth: returns all days in given month that match weekdayName */
+function getAllWeekdaysInMonth(weekdayName, monthDate){
+  const days = [];
+  const first = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
+  const last = new Date(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
+  const target = WD_MAP[weekdayName.toLowerCase()];
+  if(target === undefined) return days;
+  for(let d=1; d<= last.getDate(); d++){
+    const curr = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
+    if(curr.getDay() === target) days.push(startOfDay(curr));
+  }
+  return days;
+}
+
+/* hexToRgba for pill backgrounds */
+function hexToRgba(hex, alpha){
+  if(!hex) return '';
+  const h = hex.replace('#','');
+  const bigint = parseInt(h,16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+/* save events */
+function saveEvents(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(events)); }
+
+/* -------------------------
+  Speech recognition & beep
+---------------------------*/
+let recognition = null;
+function initSpeech(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition) return null;
+  const rec = new SpeechRecognition();
+  rec.lang = 'de-DE';
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  return rec;
+}
+function playBeep(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 1000;
+    gain.gain.value = 0.0009; // very quiet
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start();
+    setTimeout(()=>{ osc.stop(); ctx.close(); }, 110);
+  }catch(e){ /* ignore */ }
+}
+
+recognition = initSpeech();
+if(recognition){
+  recognition.addEventListener('result', (evt) => {
+    const text = evt.results[0][0].transcript;
+    freeInput.value = text;
+    // small delay then add
+    setTimeout(()=> { addEventBtn.click(); }, 150);
+  });
+  recognition.addEventListener('end', ()=> {
+    micBtn.textContent = '🎙';
+  });
+  recognition.addEventListener('error', (e) => {
+    micBtn.textContent = '🎙';
+    console.error('Speech error', e);
+  });
+}
+
+/* mic button: request microphone permission via getUserMedia if needed, then start recognition (no popup) */
+micBtn.addEventListener('click', async () => {
+  if(!recognition){
+    alert('Spracherkennung wird in diesem Browser nicht unterstützt. Bitte Chrome/Edge verwenden.');
+    return;
+  }
+  try{
+    // request microphone permission explicitly (some browsers require getUserMedia for permissions)
+    await navigator.mediaDevices.getUserMedia({ audio: true }).catch(()=>{});
+  }catch(e){}
+  try{
+    playBeep();
+    recognition.start();
+    micBtn.textContent = '🎙️ …';
+  }catch(e){
+    console.error(e);
+  }
 });
 
-/* ---------- Theme toggle ---------- */
-document.getElementById('themeToggle').addEventListener('click', () => {
-  const body = document.body;
-  const newTheme = body.dataset.theme === 'light' ? 'dark' : 'light';
-  body.dataset.theme = newTheme;
-  localStorage.setItem(THEME_KEY, newTheme);
-});
-
-/* ---------- Month nav ---------- */
-prevMonthBtn.addEventListener('click', ()=>{ changeMonth(-1); });
-nextMonthBtn.addEventListener('click', ()=>{ changeMonth(1); });
-function changeMonth(offset){
-  viewDate.setMonth(viewDate.getMonth() + offset);
-  updateMonthTitle();
-  renderMonth(viewDate);
-}
-
-/* ---------- Add / Clear ---------- */
-addEventBtn.addEventListener('click', ()=> {
-  const raw = freeInput.value.trim();
-  const type = typeSelect.value;
-  if(!raw) return alert('Bitte Text eingeben.');
-  const parsed = parseInputToEvent(raw, type);
-  if(!parsed || parsed.length === 0) return alert('Konnte keine Termine erkennen.');
-  // append, persist
-  events.push(...parsed);
-  saveEvents();
-  freeInput.value = '';
-  renderMonth(viewDate);
-  renderWeeks();
-});
-
-/* clear/reset */
-clearBtn.addEventListener('click', ()=> {
-  if(confirm('Alle Events löschen?')) {
-    events = [];
-    saveEvents();
-    renderMonth(viewDate);
-    renderWeeks();
-  }
-});
-
-/* ---------- Persistence ---------- */
-function saveEvents(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-}
-
-/* ---------- Rendering month ---------- */
-function updateMonthTitle(){
-  const monthNames = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
-  monthTitle.textContent = `${monthNames[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
-}
-
-function renderMonth(date){
-  calendarGrid.innerHTML = '';
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const first = new Date(year, month, 1);
-  const startDay = first.getDay(); // 0..6 Sun..Sat
-  const leadingEmpty = (startDay + 6) % 7;
-  const daysInMonth = new Date(year, month+1, 0).getDate();
-  for(let i=0;i<leadingEmpty;i++){
-    const d = document.createElement('div'); d.className='day'; d.style.opacity = 0.5; calendarGrid.appendChild(d);
-  }
-  const weekDays = ['Mo','Di','Mi','Do','Fr','Sa','So'];
-  for(let day=1; day<=daysInMonth; day++){
-    const cellDate = new Date(year, month, day);
-    const iso = formatYMD(cellDate);
-    const cell = document.createElement('div'); cell.className='day';
-    const dateNum = document.createElement('div'); dateNum.className='date-num';
-    const weekdayIndex = cellDate.getDay()===0?6:cellDate.getDay()-1;
-    dateNum.innerHTML = `${day}<span class="weekday">${weekDays[weekdayIndex]}</span>`;
-    cell.appendChild(dateNum);
-    // find events for iso
-    const dayEvents = events.filter(e => e.date === iso).sort((a,b)=> timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
-    // mark ganztag if any event has no times
-    const hasAllDay = dayEvents.some(e=> !e.startTime && !e.endTime);
-    if(hasAllDay) cell.classList.add('ganztag'); else cell.classList.remove('ganztag');
-    // render pills (max N)
-    const MAX_PILLS = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-pills-per-day')) || 2;
-    if(dayEvents.length){
-      for(let i=0;i<Math.min(MAX_PILLS, dayEvents.length); i++){
-        const ev = dayEvents[i];
-        const pill = document.createElement('div');
-        pill.className = 'event-pill ' + (ev.type === 'private' ? 'type-private' : (ev.type === 'work' ? 'type-work' : 'type-default'));
-        if(ev.color) pill.style.background = hexToRgba(ev.color, 0.10);
-        if(ev.color) pill.style.borderLeftColor = ev.color;
-        const timeText = ev.startTime ? (ev.startTime + (ev.endTime ? ' - ' + ev.endTime : '')) : '';
-        pill.innerHTML = `<div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${timeText} ${escapeHtml(ev.title)}</div>
-                          <div style="display:flex;gap:6px;align-items:center">
-                            <a class="gc-link" title="In Google Kalender öffnen" href="${generateGoogleCalendarUrl(ev)}" target="_blank" rel="noopener">📅</a>
-                          </div>`;
-        // attach event data for color-change via contextmenu/longpress
-        pill.dataset.eventId = ev.id;
-        pill.dataset.groupId = ev.groupId || '';
-        // contextmenu for color
-        pill.addEventListener('contextmenu', (evnt) => {
-          evnt.preventDefault();
-          openColorPopupAt(evnt.clientX, evnt.clientY, ev.dataset.eventId || ev.id, ev.dataset.groupId || ev.groupId);
-        });
-        // also attach long-press for mobile
-        attachLongPress(pill, () => {
-          const rect = pill.getBoundingClientRect();
-          openColorPopupAt(rect.left + 10, rect.top + 10, ev.id, ev.groupId || '');
-        });
-        cell.appendChild(pill);
-      }
-      if(dayEvents.length > MAX_PILLS){
-        const more = document.createElement('div'); more.className='tiny-muted'; more.style.marginTop='6px'; more.textContent = `+${dayEvents.length - MAX_PILLS} weitere`;
-        cell.appendChild(more);
-      }
-    }
-    // border color
-    if(dayEvents.some(e=> e.type==='private')) cell.style.border = '2px solid #d32f2f';
-    else if(dayEvents.some(e=> e.type==='work')) cell.style.border = '2px solid #2e7d32';
-    else if(dayEvents.length>0) cell.style.border = '2px solid rgba(255,255,255,0.06)';
-    else cell.style.border = '1px solid rgba(255,255,255,0.04)';
-    calendarGrid.appendChild(cell);
-  }
-}
-
-/* ---------- Weeks list ---------- */
-function renderWeeks(){
-  const container = weeksList;
-  container.innerHTML = '';
-  const today = startOfDay(new Date());
-  const weeks = [];
-  for(let w=0; w<8; w++){
-    const start = addDays(startOfWeek(today), w*7);
-    const end = addDays(start, 6);
-    const evs = events.filter(e => {
-      const d = parseYMD(e.date);
-      return d >= start && d <= end;
-    }).sort((a,b)=> new Date(a.date+'T'+(a.startTime||'00:00')) - new Date(b.date+'T'+(b.startTime||'00:00')));
-    if(evs.length) weeks.push({start,end,events:evs});
-  }
-  const MAX_WEEK_EVENTS = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-weeklist-events')) || 80;
-  let totalShown = 0;
-  for(const wk of weeks){
-    if(totalShown >= MAX_WEEK_EVENTS) break;
-    const item = document.createElement('div'); item.className='week-item';
-    const title = document.createElement('div'); title.className='week-title';
-    title.innerHTML = `<div>${formatShort(wk.start)} — ${formatShort(wk.end)}</div><div class="tiny-muted">${wk.events.length} Termine</div>`;
-    item.appendChild(title);
-    for(const ev of wk.events){
-      if(totalShown >= MAX_WEEK_EVENTS) break;
-      const row = document.createElement('div'); row.className='event-row ' + (ev.type==='private'?'private':(ev.type==='work'?'work':'default'));
-      const timeText = ev.startTime ? (ev.startTime + (ev.endTime ? ' - ' + ev.endTime : '')) : '';
-      row.innerHTML = `<div style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${timeText} ${escapeHtml(ev.title)}</div>
-                       <div class="tiny-muted">${formatDayTime(ev.date, ev.startTime)}</div>`;
-      // color indicator
-      if(ev.color){
-        const dot = document.createElement('span');
-        dot.className = 'palette-dot';
-        dot.style.background = ev.color;
-        dot.style.marginRight = '8px';
-        row.insertBefore(dot, row.firstChild);
-      }
-      // click opens GC
-      row.addEventListener('click', ()=> {
-        window.open(generateGoogleCalendarUrl(ev), '_blank', 'noopener');
-      });
-      // contextmenu to color
-      row.addEventListener('contextmenu', (e)=> {
-        e.preventDefault();
-        openColorPopupAt(e.clientX, e.clientY, ev.id, ev.groupId || '');
-      });
-      attachLongPress(row, ()=> {
-        const rect = row.getBoundingClientRect();
-        openColorPopupAt(rect.left + 10, rect.top + 10, ev.id, ev.groupId || '');
-      });
-      item.appendChild(row);
-      totalShown++;
-    }
-    container.appendChild(item);
-  }
-  if(totalShown === 0){
-    container.innerHTML = `<div class="tiny-muted">Keine kommenden Termine.</div>`;
-  }
-}
-
-/* ---------- Parser (extended) ---------- */
-/* Returns array of event objects (multiple for ranges/repeats), each event may have groupId if related */
+/* -------------------------
+  Parser (extended)
+  returns array of event objects (may be multiple entries)
+  event: {id, groupId, date:'YYYY-MM-DD', title, startTime, endTime, type, color}
+---------------------------*/
 function parseInputToEvent(text, type='default'){
   if(!text) return [];
   const original = text.trim();
@@ -638,10 +436,9 @@ function parseInputToEvent(text, type='default'){
   const now = new Date();
   const today = startOfDay(now);
   const OUT = [];
-  // use groupId for related multi-day events
   const groupId = 'grp_' + Math.random().toString(36).slice(2,9);
 
-  // 1) detect time ranges or single times
+  // 1) times
   let startTime = '', endTime = '';
   const timeRange = t.match(/(\d{1,2}(?::\d{2})?)\s*[-–]\s*(\d{1,2}(?::\d{2})?)/);
   if(timeRange){
@@ -653,16 +450,16 @@ function parseInputToEvent(text, type='default'){
     if(around){
       startTime = normalizeTime(around[1]);
       endTime = addHourToTime(startTime, 1);
-      t = t.replace(around[0], '').trim();
+      t = t.replace(around[0],'').trim();
     }
   }
 
-  // Helper to create event object
-  function makeEventObj(dateObj, title){
+  // helper to create event object
+  function makeEventObj(d, title, isGrouped=false){
     return {
       id: 'ev_' + Math.random().toString(36).slice(2,9),
-      groupId: title && title.startsWith('[multi]') ? groupId : null,
-      date: formatYMD(dateObj),
+      groupId: isGrouped ? groupId : null,
+      date: formatYMD(d),
       title: title || original,
       startTime: startTime || '',
       endTime: endTime || '',
@@ -671,7 +468,7 @@ function parseInputToEvent(text, type='default'){
     };
   }
 
-  // date literal dd.mm.yyyy or dd/mm/yyyy
+  // explicit date dd.mm.yyyy or dd/mm/yyyy
   const explicitDate = t.match(/(\d{1,2}[\.\/]\d{1,2}[\.\/]\d{2,4})/);
   if(explicitDate){
     const parsed = parseDateString(explicitDate[1]);
@@ -682,157 +479,117 @@ function parseInputToEvent(text, type='default'){
     }
   }
 
-  // "bis ..." patterns: capture until end target (e.g., "bis übermorgen", "bis nächste woche freitag", "bis zum wochenende")
-  // We'll attempt to detect a "bis" and compute inclusive dates
-  const bisMatch = t.match(/(bis(?:\s+zum|\s+zur|\s+zu)?)\s+(.+)$/);
-  if(bisMatch){
-    const targetPhrase = bisMatch[2].trim();
-    // compute endDate based on targetPhrase
-    let endDate = null;
-    // "übermorgen"
-    if(/\bübermorgen\b/.test(targetPhrase)) endDate = addDays(today,2);
-    else if(/\bmorgen\b/.test(targetPhrase)) endDate = addDays(today,1);
-    else if(/\bheute\b/.test(targetPhrase)) endDate = today;
-    else if(/\bzum\s+wochenende\b|\bzum\s+ende\s+der\s+woche\b|\bwochenende\b/.test(targetPhrase)) {
-      // until weekend = up to Friday (user spec earlier: "bis zum Wochenende" -> Mon-Fri)
-      endDate = addDays(startOfWeek(today), 4); // Friday of current week
-    } else {
-      // "nächste woche freitag" or "nächsten freitag"
-      const m = targetPhrase.match(/(nächste(?:n|r)?\s+woche)?\s*(nächsten|nächste|nächster)?\s*(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
-      if(m){
-        if(/nächste\s+woche/.test(targetPhrase)){
-          const startNext = addDays(startOfWeek(today), 7);
-          const wd = m[3];
-          endDate = nextWeekdayFrom(startNext, wd);
-        } else {
-          endDate = nextWeekdayFrom(today, m[3]);
-        }
-      } else {
-        // "nächste woche" as general -> end = end of next week
-        if(/\bnächste\s+woche\b/.test(targetPhrase)){
-          endDate = addDays(startOfWeek(today), 13); // next week's Sunday
-        }
-        // "bis ende des monats"
-        if(/\bend(e)?\s+des\s+monats|ende\s+des\s+monats|bis\s+ende\s+des\s+monats/.test(targetPhrase)){
-          endDate = endOfMonth(today);
-        }
-        // "bis nächste Woche Freitag" fallback
-        const m2 = targetPhrase.match(/(nächste(?:n|r)?\s+woche\s+)?(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
-        if(m2 && !endDate){
-          if(m2[1]) {
-            const startNext = addDays(startOfWeek(today), 7);
-            endDate = nextWeekdayFrom(startNext, m2[2]);
-          } else {
-            endDate = nextWeekdayFrom(today, m2[2]);
-          }
-        }
-      }
-    }
-
-    if(endDate){
-      // Now determine range start: default = today (or optionally a phrase like "ab Montag")
-      let startDate = today;
-      const abMatch = t.match(/ab\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
-      if(abMatch){
-        const sd = nextWeekdayFrom(today, abMatch[1]);
-        // if "ab Montag" and we are after monday of this week, nextWeekdayFrom returns next occurrence; if we want current week's Monday we might need startOfWeek.
-        startDate = sd;
-      } else {
-        // "in der woche ab montag" pattern
-        const inWeekMatch = t.match(/(?:in\s+der|diese|aktuell(?:e)?)\s+woche.*ab\s+(montag|dienstag|mittwoch|donnerstag|freitag)/);
-        if(inWeekMatch){
-          // find Monday of current week
-          const startWeek = startOfWeek(today);
-          startDate = nextWeekdayFrom(startWeek, inWeekMatch[1]);
-        }
-      }
-      // Ensure start <= end
-      let iter = startOfDay(startDate);
-      while(iter <= endDate){
-        OUT.push({
-          id: 'ev_' + Math.random().toString(36).slice(2,9),
-          groupId: groupId,
-          date: formatYMD(iter),
-          title: original.replace(bisMatch[0],'').trim() || original,
-          startTime: startTime || '',
-          endTime: endTime || '',
-          type: type,
-          color: null
-        });
-        iter = addDays(iter, 1);
-      }
-      return OUT;
-    }
+  // "in X tagen" (zwei wochen -> in 14 tagen) and "in 2 wochen"
+  const inDays = t.match(/in\s+(\d{1,2})\s+tage?n?/);
+  const inWeeks = t.match(/in\s+(\d{1,2})\s+wochen/);
+  if(inDays){
+    OUT.push(makeEventObj(addDays(today, parseInt(inDays[1],10)), t));
+    return OUT;
   }
-
-  // Pattern "jeden tag" optionally bounded by "bis ..."
-  if(/\bjeden\s+tag\b/.test(t) || /\btäglich\b/.test(t)){
-    // Check for bound "bis X"
-    let boundDate = null;
-    let bm;
-    if((bm = t.match(/bis\s+übermorgen/))) boundDate = addDays(today,2);
-    else if((bm = t.match(/bis\s+morgen/))) boundDate = addDays(today,1);
-    else if((bm = t.match(/bis\s+zum\s+wochenende|bis\s+zum\s+ende\s+der\s+woche|bis\s+zum\s+freitag|bis\s+freitag/))) {
-      // until weekend => Monday..Friday this week
-      boundDate = addDays(startOfWeek(today), 4);
-    } else if((bm = t.match(/bis\s+nächste(?:n|r)?\s+woche\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/))){
-      const wd = bm[1]; const startNext = addDays(startOfWeek(today), 7); boundDate = nextWeekdayFrom(startNext, wd);
-    } else if((bm = t.match(/bis\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/))){
-      boundDate = nextWeekdayFrom(today, bm[1]);
-    } else if((bm = t.match(/bis\s+ende\s+des\s+monats|bis\s+ende\s+des\s+monat/))) { boundDate = endOfMonth(today); }
-    // default maximum lookahead if no bound: 30 days
-    const maxDays = boundDate ? Math.ceil((boundDate - today) / (1000*60*60*24)) : 30;
-    for(let i=0;i<=maxDays;i++){
-      const d = addDays(today,i);
-      OUT.push({
-        id: 'ev_' + Math.random().toString(36).slice(2,9),
-        groupId: groupId,
-        date: formatYMD(d),
-        title: original.replace(/\bjeden\s+tag\b|\btäglich\b/,'').trim() || original,
-        startTime: startTime || '',
-        endTime: endTime || '',
-        type: type,
-        color: null
-      });
-    }
+  if(inWeeks){
+    OUT.push(makeEventObj(addDays(today, parseInt(inWeeks[1],10)*7), t));
     return OUT;
   }
 
-  // "jeden <weekday> (im nächsten monat|im aktuellen monat|in diesem monat|im monat)"
+  // "übernächsten / in zwei wochen / übernächster" patterns: handle "in zwei wochen freitag", "übernächsten freitag"
+  const twoWeeksMatch = t.match(/(übernächste?n?|in\s+zwei\s+wochen)/);
+  if(twoWeeksMatch && t.match(/\b(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/)){
+    const wdMatch = t.match(/\b(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/);
+    if(wdMatch){
+      const wd = wdMatch[1];
+      const startFrom = addDays(startOfDay(now), 14); // two weeks ahead
+      const d = nextWeekdayFrom(addDays(startFrom, -1), wd); // ensure correct next occurrence in that week
+      OUT.push(makeEventObj(d, t)); return OUT;
+    }
+  }
+
+  // "nächste woche <weekday>" -> that weekday in next week (not entire week)
+  const nextWeekWd = t.match(/nächste(?:n|r)?\s+woche\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+  if(nextWeekWd){
+    const wd = nextWeekWd[1];
+    const startNext = addDays(startOfWeek(today), 7);
+    const d = nextWeekdayFrom(addDays(startNext, -1), wd);
+    if(d){ OUT.push(makeEventObj(d, t)); return OUT; }
+  }
+
+  // "nächsten <weekday>" or "am nächsten <weekday>" -> next week's weekday? User wanted: "Nächste Woche Freitag laufen" only Friday in two weeks? (user clarified)
+  // We'll interpret:
+  // - "nächsten freitag" => next upcoming Friday (not this week if today before Friday)
+  // - "nächste woche freitag" => next week's Friday
+  // - "nächsten samstag in zwei wochen" handled earlier by twoWeeksMatch
+  const mNext = t.match(/(?:am\s+)?nächsten?\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+  if(mNext){
+    const wd = mNext[1];
+    const d = nextWeekdayFrom(today, wd);
+    OUT.push(makeEventObj(d, t)); return OUT;
+  }
+
+  // "am <weekday>" or bare weekday e.g. "Donnerstag laufen" -> next occurrence (if phrase contains "in zwei wochen"/"übernächsten" handled above)
+  const mDay = t.match(/\b(?:am\s+)?(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/);
+  if(mDay){
+    const wd = mDay[1];
+    const d = nextWeekdayFrom(today, wd);
+    OUT.push(makeEventObj(d, t)); return OUT;
+  }
+
+  // "jeden <weekday> (im nächsten monat | im aktuellen monat | im monat)"
   let m;
   if((m = t.match(/jeden\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)(?:\s+im\s+(diesem|aktuellen|nächsten)\s+monat)?/))){
     const weekday = m[1];
-    const qualifier = m[2];
+    const qual = m[2];
     let targetMonthStart;
-    if(qualifier && /nächsten/.test(qualifier)) targetMonthStart = new Date(now.getFullYear(), now.getMonth()+1, 1);
+    if(qual && /nächsten/.test(qual)) targetMonthStart = new Date(now.getFullYear(), now.getMonth()+1, 1);
     else targetMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const days = getAllWeekdaysInMonth(weekday, targetMonthStart);
     for(const d of days){
-      // If current month and day < today, skip (reasonable)
+      // if current month and day already past, skip
       if(targetMonthStart.getMonth() === today.getMonth()){
-        if(d >= today) OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date:formatYMD(d), title: original.replace(m[0],'').trim()||original, startTime, endTime, type, color:null });
+        if(d >= today) OUT.push(makeEventObj(d, t, true));
       } else {
-        OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date:formatYMD(d), title: original.replace(m[0],'').trim()||original, startTime, endTime, type, color:null });
+        OUT.push(makeEventObj(d, t, true));
       }
     }
     return OUT;
   }
 
-  // "jeden <weekday>" (no monthly qualifier) -> generate next 16 weeks as repeated weekly events
+  // "jeden <weekday>" -> weekly repeat (next X occurrences). We'll create weekly events for next 26 weeks (configurable)
   if((m = t.match(/jeden\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/))){
     const weekday = m[1];
-    const count = 52; // up to a year
+    const count = 26; // half year
     for(let i=0;i<count;i++){
       const candidate = nextWeekdayFrom(addDays(today, i*7), weekday);
-      if(candidate) OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(candidate), title: original.replace(m[0],'').trim()||original, startTime, endTime, type, color:null });
+      if(candidate) OUT.push(makeEventObj(candidate, t, true));
     }
     return OUT;
   }
 
-  // "in der/diese/aktuelle Woche ab Montag jeden Tag bis Mittwoch" etc.
-  // detect "in der woche" or "diese woche" optionally with "ab X bis Y"
-  if(/\b(in der woche|diese woche|aktuelle woche|diese woche)\b/.test(t)){
-    // find 'ab X' and 'bis Y'
+  // "jeden tag" or "täglich" optionally "bis X"
+  if(/\bjeden\s+tag\b/.test(t) || /\btäglich\b/.test(t)){
+    // find bound
+    let boundDate = null;
+    const bm1 = t.match(/bis\s+übermorgen/);
+    if(bm1) boundDate = addDays(today,2);
+    const bm2 = t.match(/bis\s+morgen/);
+    if(bm2) boundDate = addDays(today,1);
+    const bm3 = t.match(/bis\s+zum\s+wochenende|bis\s+zum\s+ende\s+der\s+woche|bis\s+zum\s+freitag|bis\s+freitag/);
+    if(bm3) boundDate = addDays(startOfWeek(today), 4); // friday
+    const bm4 = t.match(/bis\s+nächste(?:n|r)?\s+woche\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+    if(bm4){ const wd = bm4[1]; const startNext = addDays(startOfWeek(today),7); boundDate = nextWeekdayFrom(startNext, wd); }
+    const bm5 = t.match(/bis\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+    if(bm5) boundDate = nextWeekdayFrom(today, bm5[1]);
+    const bm6 = t.match(/bis\s+ende\s+des\s+monats|bis\s+ende\s+des\s+monat/);
+    if(bm6) boundDate = endOfMonth(today);
+
+    const maxDays = boundDate ? Math.ceil((boundDate - today)/(1000*60*60*24)) : 30;
+    for(let i=0;i<=maxDays;i++){
+      const d = addDays(today, i);
+      OUT.push(makeEventObj(d, t, true));
+    }
+    return OUT;
+  }
+
+  // in-week patterns: "in der/diese/aktuelle Woche ab Montag jeden Tag bis Mittwoch"
+  if(/\b(in der woche|diese woche|aktuelle woche)\b/.test(t)){
     const ab = t.match(/ab\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
     const bis = t.match(/bis\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
     const startWeek = startOfWeek(today);
@@ -840,13 +597,13 @@ function parseInputToEvent(text, type='default'){
     const endDay = bis ? nextWeekdayFrom(startWeek, bis[1]) : addDays(startWeek,6);
     let iter = startOfDay(startDay);
     while(iter <= endDay){
-      OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:'grp_'+groupId, date: formatYMD(iter), title: original.replace(/in der woche|diese woche|aktuelle woche|ab\s+\w+|bis\s+\w+/g,'').trim()||original, startTime, endTime, type, color:null});
-      iter = addDays(iter,1);
+      OUT.push(makeEventObj(iter, t, true));
+      iter = addDays(iter, 1);
     }
     return OUT;
   }
 
-  // "nächste woche ab Montag jeden Tag bis Mittwoch" similar to above but for next week
+  // next week with range
   if(/\bnächste(?:n|r)?\s+woche\b/.test(t)){
     const ab = t.match(/ab\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
     const bis = t.match(/bis\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
@@ -855,88 +612,192 @@ function parseInputToEvent(text, type='default'){
     const endDay = bis ? nextWeekdayFrom(startWeek, bis[1]) : addDays(startWeek,6);
     let iter = startOfDay(startDay);
     while(iter <= endDay){
-      OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(iter), title: original.replace(/\bnächste(?:n|r)?\s+woche|ab\s+\w+|bis\s+\w+/g,'').trim()||original, startTime, endTime, type, color:null});
-      iter = addDays(iter,1);
+      OUT.push(makeEventObj(iter, t, true));
+      iter = addDays(iter, 1);
     }
     return OUT;
   }
 
-  // weekend (am Wochenende or weekend)
+  // am Wochenende => next Saturday & Sunday (user asked weekend means upcoming weekend)
   if(/\b(am\s+)?wochenende\b/.test(t)){
-    const sat = nextWeekdayFrom(today,'samstag');
-    const sun = nextWeekdayFrom(today,'sonntag');
-    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date:formatYMD(sat), title: original.replace(/\b(am\s+)?wochenende\b/,'').trim()||original, startTime, endTime, type, color:null});
-    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date:formatYMD(sun), title: original.replace(/\b(am\s+)?wochenende\b/,'').trim()||original, startTime, endTime, type, color:null});
+    const sat = nextWeekdayFrom(today, 'samstag');
+    const sun = nextWeekdayFrom(today, 'sonntag');
+    if(sat) OUT.push(makeEventObj(sat, t, true));
+    if(sun) OUT.push(makeEventObj(sun, t, true));
     return OUT;
   }
 
-  // 'übermorgen' alone -> event in two days
-  if(/\bübermorgen\b/.test(t)){
-    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(addDays(today,2)), title: original.replace(/\bübermorgen\b/,'').trim()||original, startTime, endTime, type, color:null});
-    return OUT;
-  }
-  if(/\bmorgen\b/.test(t)){
-    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(addDays(today,1)), title: original.replace(/\bmorgen\b/,'').trim()||original, startTime, endTime, type, color:null});
-    return OUT;
-  }
-  if(/\bheute\b/.test(t)){
-    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(today), title: original.replace(/\bheute\b/,'').trim()||original, startTime, endTime, type, color:null});
-    return OUT;
-  }
+  // specific relative days: übermorgen (two days), morgen, heute
+  if(/\bübermorgen\b/.test(t)) { OUT.push(makeEventObj(addDays(today,2), t)); return OUT; }
+  if(/\bmorgen\b/.test(t)) { OUT.push(makeEventObj(addDays(today,1), t)); return OUT; }
+  if(/\bheute\b/.test(t)) { OUT.push(makeEventObj(today, t)); return OUT; }
 
-  // "am <weekday>" or bare weekday e.g. "Donnerstag laufen" -> next occurrence
-  if((m = t.match(/\b(am\s+)?(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/))){
-    const wd = m[2];
-    const d = nextWeekdayFrom(today, wd);
-    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(d), title: original.replace(m[0],'').trim()||original, startTime, endTime, type, color:null});
-    return OUT;
-  }
-
-  // default fallback -> today
-  OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(today), title: original, startTime, endTime, type, color:null });
+  // fallback: place today
+  OUT.push(makeEventObj(today, original));
   return OUT;
 }
 
-/* ---------- Color Picker Logic ---------- */
-let currentColorTarget = null; // {eventId, groupId}
+/* parseDateString for dd.mm.yyyy or dd/mm/yyyy */
+function parseDateString(s){
+  const cleaned = s.replace(/\./g,'/'); const parts = cleaned.split('/');
+  if(parts.length === 3){
+    let d = parseInt(parts[0],10), m = parseInt(parts[1],10), y = parseInt(parts[2],10);
+    if(y < 100) y = 2000 + y;
+    return new Date(y, m-1, d);
+  }
+  return null;
+}
+</script>
+<script>
+/* -------------------------
+  Block 3: Rendering, color picker, export (.ics), interactions
+---------------------------*/
+
+/* --- Render month grid --- */
+function updateMonthTitle(){
+  const monthNames = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+  monthTitle.textContent = `${monthNames[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
+}
+
+function renderMonth(date){
+  calendarGrid.innerHTML = '';
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const first = new Date(year, month, 1);
+  const startDay = first.getDay();
+  const leadingEmpty = (startDay + 6) % 7;
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  for(let i=0;i<leadingEmpty;i++){
+    const d = document.createElement('div');
+    d.className = 'day';
+    d.style.opacity = 0.45;
+    calendarGrid.appendChild(d);
+  }
+  const weekDays = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+  for(let day=1; day<=daysInMonth; day++){
+    const cellDate = new Date(year, month, day);
+    const iso = formatYMD(cellDate);
+    const cell = document.createElement('div');
+    cell.className = 'day';
+    const dateNum = document.createElement('div');
+    dateNum.className = 'date-num';
+    const weekdayIndex = cellDate.getDay()===0?6:cellDate.getDay()-1;
+    dateNum.innerHTML = `${day}<span class="weekday">${weekDays[weekdayIndex]}</span>`;
+    cell.appendChild(dateNum);
+
+    // events for that day
+    const dayEvents = events.filter(e => e.date === iso).sort((a,b)=> timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+    const hasAllDay = dayEvents.some(e => !e.startTime && !e.endTime);
+    if(hasAllDay) cell.classList.add('ganztag'); else cell.classList.remove('ganztag');
+
+    const MAX_PILLS = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-pills-per-day')) || 2;
+    if(dayEvents.length){
+      for(let i=0;i<Math.min(MAX_PILLS, dayEvents.length); i++){
+        const ev = dayEvents[i];
+        const pill = document.createElement('div');
+        pill.className = 'event-pill ' + (ev.type === 'private' ? 'type-private' : (ev.type === 'work' ? 'type-work' : 'type-default'));
+        if(ev.color) pill.style.background = hexToRgba(ev.color, 0.12);
+        if(ev.color) pill.style.borderLeftColor = ev.color;
+        const timeText = ev.startTime ? (ev.startTime + (ev.endTime ? ' - ' + ev.endTime : '')) : '';
+        const left = document.createElement('div');
+        left.style.fontSize='11px'; left.style.fontWeight='700'; left.style.overflow='hidden'; left.style.textOverflow='ellipsis';
+        left.textContent = `${timeText} ${ev.title}`;
+        const right = document.createElement('div');
+        right.style.display='flex'; right.style.alignItems='center'; right.style.gap='6px';
+        const gc = document.createElement('a'); gc.className='gc-link'; gc.title='In Google Kalender öffnen'; gc.href = generateGoogleCalendarUrl(ev); gc.target='_blank'; gc.rel='noopener'; gc.textContent='📅';
+        right.appendChild(gc);
+        pill.appendChild(left); pill.appendChild(right);
+
+        // attach contextmenu & longpress for color change
+        pill.dataset.eventId = ev.id;
+        pill.dataset.groupId = ev.groupId || '';
+        pill.addEventListener('contextmenu', (evnt) => { evnt.preventDefault(); openColorPopupAt(evnt.clientX, evnt.clientY, pill.dataset.eventId, pill.dataset.groupId); });
+        attachLongPress(pill, ()=> { const rect = pill.getBoundingClientRect(); openColorPopupAt(rect.left + 6, rect.top + 6, pill.dataset.eventId, pill.dataset.groupId); });
+
+        cell.appendChild(pill);
+      }
+      if(dayEvents.length > MAX_PILLS){
+        const more = document.createElement('div'); more.className='tiny-muted'; more.style.marginTop='6px'; more.textContent = `+${dayEvents.length - MAX_PILLS} weitere`;
+        cell.appendChild(more);
+      }
+    }
+
+    // border color rules
+    if(dayEvents.some(e=> e.type==='private')) cell.style.border = '2px solid #d32f2f';
+    else if(dayEvents.some(e=> e.type==='work')) cell.style.border = '2px solid #2e7d32';
+    else if(dayEvents.length>0) cell.style.border = '2px solid rgba(255,215,0,0.08)';
+    else cell.style.border = '1px solid rgba(255,255,255,0.04)';
+
+    calendarGrid.appendChild(cell);
+  }
+}
+
+/* --- Weeks list --- */
+function renderWeeks(){
+  weeksList.innerHTML = '';
+  const today = startOfDay(new Date());
+  const weeks = [];
+  for(let w=0; w<8; w++){
+    const start = addDays(startOfWeek(today), w*7);
+    const end = addDays(start, 6);
+    const evs = events.filter(e => {
+      const d = parseYMD(e.date);
+      return d >= start && d <= end;
+    }).sort((a,b)=> new Date(a.date+'T'+(a.startTime||'00:00')) - new Date(b.date+'T'+(b.startTime||'00:00')));
+    if(evs.length) weeks.push({start,end,events:evs});
+  }
+
+  const MAX_WEEK_EVENTS = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-weeklist-events')) || 120;
+  let totalShown = 0;
+  for(const wk of weeks){
+    if(totalShown >= MAX_WEEK_EVENTS) break;
+    const item = document.createElement('div'); item.className='week-item';
+    const title = document.createElement('div'); title.className='week-title';
+    title.innerHTML = `<div>${formatShort(wk.start)} — ${formatShort(wk.end)}</div><div class="tiny-muted">${wk.events.length} Termine</div>`;
+    item.appendChild(title);
+    for(const ev of wk.events){
+      if(totalShown >= MAX_WEEK_EVENTS) break;
+      const row = document.createElement('div'); row.className = 'event-row ' + (ev.type==='private'?'private':(ev.type==='work'?'work':'default'));
+      const timeText = ev.startTime ? (ev.startTime + (ev.endTime ? ' - ' + ev.endTime : '')) : '';
+      row.innerHTML = `<div style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${timeText} ${escapeHtml(ev.title)}</div><div class="tiny-muted">${formatDayTime(ev.date, ev.startTime)}</div>`;
+      if(ev.color){ const dot = document.createElement('span'); dot.className='palette-dot'; dot.style.background = ev.color; dot.style.marginRight='8px'; row.insertBefore(dot, row.firstChild); }
+      row.addEventListener('click', ()=> { window.open(generateGoogleCalendarUrl(ev), '_blank', 'noopener'); });
+      row.addEventListener('contextmenu', (e)=> { e.preventDefault(); openColorPopupAt(e.clientX, e.clientY, ev.id, ev.groupId || ''); });
+      attachLongPress(row, ()=> { const rect = row.getBoundingClientRect(); openColorPopupAt(rect.left + 6, rect.top + 6, ev.id, ev.groupId || ''); });
+      item.appendChild(row);
+      totalShown++;
+    }
+    weeksList.appendChild(item);
+  }
+
+  if(totalShown === 0) weeksList.innerHTML = `<div class="tiny-muted">Keine kommenden Termine.</div>`;
+}
+
+/* ---------- Color picker logic (small circles; choose a color to set for chosen event or group) ---------- */
+let currentColorTarget = null;
 function openColorPopupAt(x, y, eventId, groupId){
-  // build palette
   colorPopup.innerHTML = '';
   COLOR_PALETTE.forEach(item => {
-    const btn = document.createElement('button');
-    btn.style.width = '28px';
-    btn.style.height = '28px';
-    btn.style.borderRadius = '6px';
-    btn.style.border = '1px solid rgba(0,0,0,0.1)';
-    btn.style.background = item.hex;
-    btn.title = item.name;
-    btn.style.cursor = 'pointer';
-    btn.addEventListener('click', () => {
+    const c = document.createElement('div');
+    c.className = 'color-circle';
+    c.style.background = item.hex;
+    c.title = item.name;
+    c.addEventListener('click', (ev) => {
       applyColorToEventOrGroup(item.hex, eventId, groupId);
       closeColorPopup();
     });
-    colorPopup.appendChild(btn);
+    colorPopup.appendChild(c);
   });
-  colorPopup.style.left = x + 'px';
-  colorPopup.style.top = y + 'px';
+  colorPopup.style.left = (x + 4) + 'px';
+  colorPopup.style.top = (y + 4) + 'px';
   colorPopup.style.display = 'flex';
   currentColorTarget = {eventId, groupId};
-  // clicking outside closes it
-  setTimeout(()=> {
-    window.addEventListener('click', outsideColorClick);
-  }, 10);
+  setTimeout(()=> window.addEventListener('click', outsideClickColor), 10);
 }
-function closeColorPopup(){
-  colorPopup.style.display = 'none';
-  colorPopup.innerHTML = '';
-  window.removeEventListener('click', outsideColorClick);
-  currentColorTarget = null;
-}
-function outsideColorClick(e){ if(!colorPopup.contains(e.target)) closeColorPopup(); }
-
+function closeColorPopup(){ colorPopup.style.display = 'none'; colorPopup.innerHTML = ''; currentColorTarget = null; window.removeEventListener('click', outsideClickColor); }
+function outsideClickColor(e){ if(!colorPopup.contains(e.target)) closeColorPopup(); }
 function applyColorToEventOrGroup(hex, eventId, groupId){
   if(groupId){
-    // apply to all events with same groupId
     events = events.map(ev => ev.groupId === groupId ? {...ev, color: hex} : ev);
   } else {
     events = events.map(ev => ev.id === eventId ? {...ev, color: hex} : ev);
@@ -946,102 +807,54 @@ function applyColorToEventOrGroup(hex, eventId, groupId){
   renderWeeks();
 }
 
-/* ---------- Long-press helper for mobile ---------- */
-function attachLongPress(elem, callback){
-  let timer = null;
-  let moved = false;
-  const start = (e) => {
-    moved = false;
-    timer = setTimeout(()=> {
-      callback();
-      timer = null;
-    }, 600);
-  };
-  const cancel = ()=> { if(timer) { clearTimeout(timer); timer = null; } };
-  elem.addEventListener('touchstart', start);
-  elem.addEventListener('mousedown', start);
-  elem.addEventListener('touchmove', ()=> { moved=true; cancel(); });
-  elem.addEventListener('mousemove', ()=> { moved=true; cancel(); });
-  elem.addEventListener('touchend', cancel);
-  elem.addEventListener('mouseup', cancel);
-  elem.addEventListener('mouseleave', cancel);
-}
-
-/* ---------- Speech recognition ---------- */
-let recognition = null;
-let listening = false;
-function initSpeech(){
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SpeechRecognition) return null;
-  const rec = new SpeechRecognition();
-  rec.lang = 'de-DE';
-  rec.interimResults = false;
-  rec.maxAlternatives = 1;
-  return rec;
-}
-// beep using AudioContext - short sinustone
-function playBeep(){
-  try{
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = 'sine';
-    o.frequency.value = 1000; // Hz
-    g.gain.value = 0.0008; // very quiet
-    o.connect(g);
-    g.connect(ctx.destination);
-    o.start(0);
-    setTimeout(()=> {
-      o.stop();
-      ctx.close();
-    }, 100); // 100 ms
-  }catch(e){ /* ignore if not allowed */ }
-}
-
-micBtn.addEventListener('click', async () => {
-  // Try to request permission and start recognition
-  if(!recognition) recognition = initSpeech();
-  if(!recognition){
-    alert('Spracherkennung wird in diesem Browser nicht unterstützt (verwende Chrome/Edge für beste Ergebnisse).');
-    return;
+/* ---------- Long-press helper (already defined in Block 2 but ensure available) ---------- */
+/* If attachLongPress not global yet, define fallback (Block2 defined it) */
+if(typeof attachLongPress !== 'function'){
+  function attachLongPress(elem, callback){
+    let timer = null;
+    const start = () => { timer = setTimeout(()=>{ callback(); timer = null; }, 600); };
+    const cancel = () => { if(timer){ clearTimeout(timer); timer = null; } };
+    elem.addEventListener('touchstart', start);
+    elem.addEventListener('mousedown', start);
+    elem.addEventListener('touchend', cancel);
+    elem.addEventListener('mouseup', cancel);
+    elem.addEventListener('mouseleave', cancel);
+    elem.addEventListener('touchmove', cancel);
+    elem.addEventListener('mousemove', cancel);
   }
-  try{
-    // play beep and start
-    playBeep();
-    recognition.start();
-    listening = true;
-    micBtn.textContent = '🎙️ …';
-  }catch(err){
-    console.error(err);
+}
+
+/* ---------- Add / clear handlers ---------- */
+addEventBtn.addEventListener('click', ()=> {
+  const raw = freeInput.value.trim();
+  const type = typeSelect.value;
+  if(!raw) return alert('Bitte Text eingeben.');
+  const parsed = parseInputToEvent(raw, type);
+  if(!parsed || parsed.length === 0) return alert('Konnte keine Termine erkennen.');
+  events.push(...parsed);
+  saveEvents();
+  freeInput.value = '';
+  renderMonth(viewDate);
+  renderWeeks();
+});
+
+clearBtn.addEventListener('click', ()=> {
+  if(confirm('Alle Events löschen?')) {
+    events = [];
+    saveEvents();
+    renderMonth(viewDate);
+    renderWeeks();
   }
 });
 
-if(window.SpeechRecognition || window.webkitSpeechRecognition){
-  recognition = initSpeech();
-  recognition.addEventListener('result', (evt) => {
-    const text = evt.results[0][0].transcript;
-    // place in input and parse
-    freeInput.value = text;
-    // small delay to allow UI updating
-    setTimeout(()=> {
-      addEventBtn.click();
-    }, 150);
-  });
-  recognition.addEventListener('end', ()=> {
-    listening = false;
-    micBtn.textContent = '🎙';
-  });
-  recognition.addEventListener('error', (e)=> {
-    listening = false;
-    micBtn.textContent = '🎙';
-    console.error('Speech error', e);
-  });
-}
+/* ---------- Month nav ---------- */
+prevMonthBtn.addEventListener('click', ()=>{ viewDate.setMonth(viewDate.getMonth() - 1); updateMonthTitle(); renderMonth(viewDate); });
+nextMonthBtn.addEventListener('click', ()=>{ viewDate.setMonth(viewDate.getMonth() + 1); updateMonthTitle(); renderMonth(viewDate); });
 
-/* ---------- Google import (open each event in new tab) ---------- */
+/* ---------- Google import: open individual GC templates in new tabs (safe but limited) ---------- */
 googleImportBtn.addEventListener('click', ()=> {
   if(!events || events.length === 0) return alert('Keine Events zum Exportieren.');
-  const LIMIT = 120; // safe limit to avoid popup block
+  const LIMIT = 80; // avoid too many popups
   const toExport = events.slice(0, LIMIT);
   for(const ev of toExport){
     const url = generateGoogleCalendarUrl(ev);
@@ -1050,31 +863,23 @@ googleImportBtn.addEventListener('click', ()=> {
   if(events.length > LIMIT) alert(`Es wurden ${LIMIT} Einträge geöffnet. Weitere ${events.length - LIMIT} wurden nicht geöffnet (Limit). Verwende .ics Export für Bulk-Import.`);
 });
 
-/* ---------- ICS export (download as single .ics) ---------- */
+/* ---------- ICS export (single .ics file, includes X-APPLE-CALENDAR-COLOR if color present) ---------- */
 icsExportBtn.addEventListener('click', ()=> {
-  if(!events || events.length===0) return alert('Keine Events zum Exportieren.');
+  if(!events || events.length === 0) return alert('Keine Events zum Exportieren.');
   const ics = generateICS(events);
   const blob = new Blob([ics], {type: 'text/calendar;charset=utf-8'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'mein_kalender_export.ics';
-  document.body.appendChild(a);
-  a.click();
+  const a = document.createElement('a'); a.href = url; a.download = 'mein_kalender_export.ics'; document.body.appendChild(a); a.click();
   setTimeout(()=> { URL.revokeObjectURL(url); a.remove(); }, 2000);
 });
 
-/* ---------- ICS generation ---------- */
 function generateICS(evList){
-  // simple ICS with VEVENTs, include X-APPLE-CALENDAR-COLOR if color present
   const CRLF = '\r\n';
   let out = '';
   out += 'BEGIN:VCALENDAR' + CRLF;
   out += 'VERSION:2.0' + CRLF;
   out += 'PRODID:-//MEIN KALENDER//EN' + CRLF;
   out += 'CALSCALE:GREGORIAN' + CRLF;
-  out += 'METHOD:PUBLISH' + CRLF;
-  // timezone (naive)
   for(const ev of evList){
     const uid = ev.id + '@mein-kalender.local';
     const dtstart = formatICSDateTime(ev.date, ev.startTime);
@@ -1086,6 +891,7 @@ function generateICS(evList){
     out += `DTSTART:${dtstart}` + CRLF;
     out += `DTEND:${dtend}` + CRLF;
     if(ev.color){
+      // Non-standard COLOR + X-APPLE-CALENDAR-COLOR (Google may ignore COLOR but apple can pick)
       out += `COLOR:${ev.color}` + CRLF;
       out += `X-APPLE-CALENDAR-COLOR:${ev.color}` + CRLF;
     }
@@ -1101,21 +907,14 @@ function formatICSDateTime(dateOrIso, timeStr){
   let hhmmss = '000000';
   if(timeStr){
     const t = normalizeTime(timeStr);
-    if(t){
-      const [hh,mm] = t.split(':');
-      hhmmss = hh.padStart(2,'0') + mm.padStart(2,'0') + '00';
-    }
+    if(t){ const [hh,mm] = t.split(':'); hhmmss = `${hh.padStart(2,'0')}${mm.padStart(2,'0')}00`; }
   }
-  const y = dt.getFullYear();
-  const m = String(dt.getMonth()+1).padStart(2,'0');
-  const d = String(dt.getDate()).padStart(2,'0');
+  const y = dt.getFullYear(); const m = String(dt.getMonth()+1).padStart(2,'0'); const d = String(dt.getDate()).padStart(2,'0');
   return `${y}${m}${d}T${hhmmss}Z`;
 }
-function escapeICSText(s){
-  return (s || '').replace(/\n/g,'\\n').replace(/,/g,'\\,');
-}
+function escapeICSText(s){ return (s || '').replace(/\n/g,'\\n').replace(/,/g,'\\,'); }
 
-/* ---------- Google Calendar URL generator ---------- */
+/* ---------- Google Calendar URL generator (pre-fill) ---------- */
 function generateGoogleCalendarUrl(ev){
   const formatForUrl = (s) => s.replace(/[-:]/g,'') + 'Z';
   const startStr = formatForUrl(ev.date + 'T' + (ev.startTime ? ev.startTime.replace(':','') + '00' : '000000'));
@@ -1125,132 +924,18 @@ function generateGoogleCalendarUrl(ev){
   return `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${startStr}/${endStr}&details=${details}`;
 }
 
-/* ---------- Utilities ---------- */
-function escapeHtml(text){
-  if(!text) return '';
-  return String(text).replace(/[&<>"'`=\/]/g, function(s) {
-    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'}[s];
-  });
-}
-function formatYMD(d){
-  const dt = new Date(d);
-  const y = dt.getFullYear();
-  const m = String(dt.getMonth()+1).padStart(2,'0');
-  const day = String(dt.getDate()).padStart(2,'0');
-  return `${y}-${m}-${day}`;
-}
-function parseYMD(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
-function formatShort(date){
-  const d = new Date(date);
-  const dd = String(d.getDate()).padStart(2,'0');
-  const mm = String(d.getMonth()+1).padStart(2,'0');
-  const yyyy = d.getFullYear();
-  return `${dd}.${mm}.${yyyy}`;
-}
-function formatDayTime(dateStr, timeStr){
-  const d = new Date(dateStr);
-  const day = d.toLocaleDateString('de-DE',{weekday:'short', day:'2-digit', month:'short'});
-  return timeStr ? `${day} • ${timeStr}` : `${day}`;
-}
-function startOfDay(date){ const d = new Date(date); d.setHours(0,0,0,0); return d; }
-function startOfWeek(date){ const d = new Date(date); const day = d.getDay() || 7; d.setDate(d.getDate() - day + 1); return startOfDay(d); }
-function addDays(d, days){ const x = new Date(d); x.setDate(x.getDate() + days); return startOfDay(x); }
-function timeToMinutes(t){ if(!t) return 0; const [hh,mm] = t.split(':').map(s=>parseInt(s||'0',10)); return hh*60 + mm; }
-function parseDateString(s){
-  const cleaned = s.replace(/\./g,'/'); const parts = cleaned.split('/');
-  if(parts.length===3){
-    let dd = parseInt(parts[0],10), mm = parseInt(parts[1],10), yy = parseInt(parts[2],10);
-    if(yy < 100) yy = 2000 + yy;
-    return new Date(yy, mm-1, dd);
-  }
-  return null;
-}
-function normalizeTime(t){
-  if(!t) return '';
-  const cleaned = String(t).replace('.',':');
-  if(/^\d{1,2}$/.test(cleaned)) return cleaned.padStart(2,'0') + ':00';
-  if(/^\d{1,2}:\d{1,2}$/.test(cleaned)){
-    const [hh,mm] = cleaned.split(':');
-    return hh.padStart(2,'0') + ':' + mm.padStart(2,'0');
-  }
-  return '';
-}
-function addHourToTime(t, h){
-  if(!t) return '';
-  const [hh,mm] = t.split(':').map(Number);
-  const d = new Date(); d.setHours(hh + h, mm || 0, 0, 0);
-  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
-}
-function endOfMonth(d){ const x = new Date(d.getFullYear(), d.getMonth()+1, 0); return startOfDay(x); }
-function endOfWeek(d){ const x = startOfWeek(d); return addDays(x,6); }
-
-/* weekday helpers */
-function getAllWeekdaysInMonth(weekdayName, monthDate){
-  const days = [];
-  const first = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
-  const last = new Date(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
-  const wdMap = {montag:1,dienstag:2,mittwoch:3,donnerstag:4,freitag:5,samstag:6,sonntag:0};
-  const target = wdMap[weekdayName.toLowerCase()];
-  if(target === undefined) return days;
-  for(let d=1; d<=last.getDate(); d++){
-    const curr = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
-    if(curr.getDay() === target) days.push(startOfDay(curr));
-  }
-  return days;
-}
-function nextWeekdayFrom(fromDate, weekdayName){
-  const wdMap = {montag:1,dienstag:2,mittwoch:3,donnerstag:4,freitag:5,samstag:6,sonntag:0};
-  const target = wdMap[weekdayName.toLowerCase()];
-  if(target === undefined) return null;
-  const d = new Date(fromDate); d.setHours(0,0,0,0);
-  let delta = (target - d.getDay() + 7) % 7;
-  if(delta === 0) delta = 7;
-  d.setDate(d.getDate() + delta);
-  return startOfDay(d);
-}
-
-/* convert hex color to rgba for background tints */
-function hexToRgba(hex, alpha){
-  if(!hex) return '';
-  const h = hex.replace('#','');
-  const bigint = parseInt(h,16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
-/* ---------- Utilities to attach events from saved data ---------- */
-function rehydrateAndRender(){
+/* ---------- Init render ---------- */
+(function init(){
+  // restore theme
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  if(savedTheme) document.body.dataset.theme = savedTheme;
+  updateMonthTitle();
   renderMonth(viewDate);
   renderWeeks();
-}
-
-/* ---------- Start: render initial state ---------- */
-rehydrateAndRender();
-
-/* ---------- Ensure saves happen when user leaves ---------- */
-window.addEventListener('beforeunload', () => {
-  saveEvents();
-});
-
-/* ---------- small helper: when clicking "Add" via speech, re-render --- */
-function addEventsFromInput(text){
-  const type = typeSelect.value;
-  const parsed = parseInputToEvent(text, type);
-  if(parsed && parsed.length){
-    events.push(...parsed);
-    saveEvents();
-    rehydrateAndRender();
-  }
-}
-
-/* make the mic button clickable twice if needed */
-micBtn.addEventListener('dblclick', ()=> {
-  // fallback to ensure recognition re-init
-  if(recognition) recognition.stop();
-});
-
+  // persist on page unload
+  window.addEventListener('beforeunload', () => { saveEvents(); });
+})();
 </script>
+
 </body>
 </html>

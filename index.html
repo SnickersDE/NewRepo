@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>MEIN KALENDER</title>
+<title>MEIN KALENDER — Vollversion</title>
 
 <!-- Spartan Font -->
 <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -20,7 +20,8 @@
   --shadow: 0 6px 20px rgba(0,0,0,0.18);
   --accent-trans: rgba(128,0,32,0.18);
   --max-pills-per-day: 2;
-  --max-weeklist-events: 50;
+  --max-weeklist-events: 80;
+  --spartan: 'Spartan', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
 /* THEMES */
@@ -29,26 +30,25 @@
   --panel: var(--glass-dark);
   --text: #fff;
 }
-
 [data-theme="light"] {
   --bg: #f7f7f7;
   --panel: rgba(255,255,255,0.6);
   --text: #111;
 }
 
-/* Base */
+/* base */
 html,body{
   height:100%;
   margin:0;
   padding:0;
-  font-family: 'Spartan', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-family: var(--spartan);
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   background-color: var(--bg, #f7f7f7);
   color: var(--text, #111);
 }
 
-/* Keep your original layout and styles */
+/* Layout mostly preserved from your original */
 body{
   background: url('hintergrund.jpg') center/cover no-repeat fixed;
   display:flex;
@@ -82,10 +82,9 @@ header.app-header {
   position:relative;
 }
 
-/* Title + Google import (small) */
 header .title {
   font-size:18px;
-  font-weight:700; /* Spartan Bold */
+  font-weight:700;
   letter-spacing:1px;
   color:var(--text);
   display:flex;
@@ -93,20 +92,17 @@ header .title {
   gap:10px;
 }
 
-/* Google import small area */
+/* google import gold arrow */
 .google-import {
   display:flex;
   align-items:center;
   gap:8px;
-  font-size:12px;
-  opacity:0.8;
   cursor:pointer;
-  color:var(--text);
-  background: transparent;
+  padding:6px 8px;
   border-radius:8px;
-  padding:4px 6px;
+  transition: transform .08s ease;
 }
-.google-import .label { font-size:11px; opacity:0.7; }
+.google-import:hover { transform: translateY(-2px); }
 
 /* controls */
 .controls {
@@ -125,7 +121,7 @@ header .title {
   font-weight:600;
 }
 
-/* Left: Calendar area */
+/* calendar left */
 .calendar-card {
   background:var(--panel);
   border-radius:14px;
@@ -144,12 +140,7 @@ header .title {
   align-items:center;
 }
 
-.month-title {
-  font-size:18px;
-  font-weight:700;
-  color:var(--text);
-}
-
+.month-title { font-size:18px; font-weight:700; color:var(--text); }
 .nav-btn {
   background:transparent;
   border-radius:10px;
@@ -159,7 +150,7 @@ header .title {
   color:var(--text);
 }
 
-/* Calendar grid */
+/* calendar grid */
 .calendar-grid {
   display:grid;
   grid-template-columns: repeat(7,1fr);
@@ -186,7 +177,7 @@ header .title {
 .day .date-num { font-size:13px; font-weight:700; display:flex; flex-direction:column; }
 .day .weekday { font-size:10px; font-weight:400; opacity:0.6; margin-top:3px; }
 
-/* Event pill */
+/* event pill */
 .event-pill {
   margin-top:auto;
   padding:6px 8px;
@@ -205,27 +196,25 @@ header .title {
   text-overflow:ellipsis;
 }
 
-/* small Google icon in pill */
+/* small GC icon */
 .event-pill .gc-link {
   font-size:12px;
   color:var(--bordeaux);
   cursor:pointer;
-  margin-left:4px;
+  margin-left:6px;
   text-decoration:none;
 }
 
-/* colors by type */
-.type-default { border-left-color: rgba(255,255,255,0.08); }
-.type-private { border-left-color: #d32f2f; }
-.type-work    { border-left-color: #2e7d32; }
+/* Colors (default palette) */
+.palette-dot { width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,0.1); }
 
-/* highlight days with all-day events */
+/* highlight for ganztag */
 .day.ganztag {
   background: linear-gradient(180deg, rgba(128,0,32,0.08), rgba(128,0,32,0.03));
   border: 2px solid var(--bordeaux-strong);
 }
 
-/* Right column: Input & week list */
+/* right column */
 .side-card {
   background:var(--panel);
   border-radius:14px;
@@ -235,13 +224,7 @@ header .title {
   flex-direction:column;
   gap:12px;
 }
-
-.input-row {
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-
+.input-row { display:flex; gap:8px; align-items:center; }
 .input-row input[type="text"]{
   flex:1;
   padding:10px 12px;
@@ -250,9 +233,8 @@ header .title {
   outline:none;
   background: rgba(255,255,255,0.03);
   color:var(--text);
-  font-weight:700; /* Spartan bold text in input */
+  font-weight:700;
 }
-
 .small-select {
   padding:8px 10px;
   background: transparent;
@@ -261,8 +243,6 @@ header .title {
   color:var(--text);
   font-weight:600;
 }
-
-/* icon buttons */
 .icon-btn {
   padding:8px 10px;
   border-radius:10px;
@@ -291,7 +271,6 @@ header .title {
   gap:8px;
   border:1px solid rgba(255,255,255,0.03);
 }
-
 .week-title {
   font-weight:700;
   color:var(--text);
@@ -299,7 +278,6 @@ header .title {
   justify-content:space-between;
   align-items:center;
 }
-
 .event-row {
   display:flex;
   justify-content:space-between;
@@ -311,17 +289,31 @@ header .title {
   border-left: 6px solid rgba(255,255,255,0.03);
   cursor:pointer;
 }
-
 .event-row.private { border-left-color: #d32f2f; }
 .event-row.work    { border-left-color: #2e7d32; }
 .event-row.default { border-left-color: rgba(255,255,255,0.06); }
 
 .tiny-muted { font-size:12px; opacity:0.7; }
 
+/* color-picker popup */
+.color-popup {
+  position: absolute;
+  z-index: 9999;
+  background: var(--panel);
+  padding:8px;
+  border-radius:8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  display:flex;
+  gap:8px;
+}
+
+/* mobile long-press hint */
+.longpress-hint { font-size:11px; opacity:0.7; }
+
 /* responsive */
 @media (max-width:980px){
   .app { grid-template-columns: 1fr; }
-  .google-import { font-size:11px; }
+  .google-import .label { display:none; }
 }
 </style>
 </head>
@@ -331,21 +323,23 @@ header .title {
     <header class="app-header">
       <div class="title">
         MEIN KALENDER
-        <div id="googleImportBtn" class="google-import" title="Alle Termine an Google Kalender senden">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="opacity:0.95;">
-            <path d="M3 4a2 2 0 012-2h2v2H5v16h14V4h-2V2h2a2 2 0 012 2v18a2 2 0 01-2 2H5a2 2 0 01-2-2V4z" fill="currentColor"/>
-            <path d="M7 8h10v2H7z" fill="white" opacity="0.9"/>
+        <div id="googleImportBtn" class="google-import" title="An dein Google Kalender importieren" aria-label="An dein Google Kalender importieren">
+          <!-- golden upwards arrow -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 1px 0 rgba(0,0,0,0.1));">
+            <path d="M12 2v16" stroke="#FFD700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 8l6-6 6 6" stroke="#FFD700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="3" y="18" width="18" height="3" rx="1.2" fill="#FFD700" />
           </svg>
           <span class="label">An dein Google Kalender importieren</span>
         </div>
       </div>
       <div class="controls">
         <button id="themeToggle" class="control-btn" title="Theme umschalten">🌙 / ☀</button>
-        <button id="pushToggle" class="control-btn">🔔</button>
+        <button id="pushToggle" class="control-btn" title="Benachrichtigungen (später)">🔔</button>
       </div>
     </header>
 
-    <!-- calendar left -->
+    <!-- left: calendar -->
     <section class="calendar-card" id="calendarCard">
       <div class="month-header">
         <button class="nav-btn" id="prevMonth">◀</button>
@@ -353,9 +347,7 @@ header .title {
         <button class="nav-btn" id="nextMonth">▶</button>
       </div>
 
-      <div class="calendar-grid" id="calendarGrid">
-        <!-- days injected here -->
-      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
     </section>
 
     <!-- right: input & weeks -->
@@ -363,88 +355,133 @@ header .title {
       <div>
         <div class="input-row">
           <input id="freeInput" type="text" placeholder="z.B. jeden Montag 18-19 Sport">
-          <select id="typeSelect" class="small-select">
+          <select id="typeSelect" class="small-select" title="Farbe/Typ">
             <option value="default">Standard</option>
             <option value="private">Privat</option>
             <option value="work">Arbeit</option>
           </select>
-          <button id="micBtn" class="icon-btn" title="Sprache (später) 🎙">🎙</button>
+          <button id="micBtn" class="icon-btn" title="Spracheingabe starten">🎙</button>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px;">
           <button id="addEventBtn" class="icon-btn" style="background:var(--bordeaux)">Hinzufügen</button>
           <button id="clearBtn" class="control-btn">Kalender zurücksetzen</button>
+          <button id="icsExportBtn" class="control-btn" title="Exportiere als .ics">.ics export</button>
         </div>
+        <div class="longpress-hint" style="margin-top:6px;">Rechtsklick (oder langes Drücken auf Mobilgerät) auf ein Event, um die Farbe zu ändern</div>
       </div>
 
       <div>
         <div style="font-weight:700;margin-bottom:8px;">Kommende Wochen</div>
-        <div class="weeks-list" id="weeksList">
-          <!-- week items injected -->
-        </div>
+        <div class="weeks-list" id="weeksList"></div>
       </div>
     </aside>
   </div>
 
+<!-- Color palette (hidden) -->
+<div id="colorPopup" class="color-popup" style="display:none;">
+  <!-- Palette items will be injected -->
+</div>
+
 <script>
-/* =========================
-   Full JS: parser, render,
-   persistence, Google export
-   ========================= */
+/* ===============================
+  Full JS implementation inline
+  - parser, speech, color picker
+  - .ics export, Google export
+  - persistence (localStorage)
+  - performance guards
+   =============================== */
 
-const STORAGE_KEY = 'mein_kalender_events_v_final_v1';
-const THEME_KEY = 'mein_kalender_theme_v1';
-let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); // array of event objects
-let viewDate = new Date(); // currently shown month
+const STORAGE_KEY = 'mein_kalender_events_v_final_v2';
+const THEME_KEY = 'mein_kalender_theme_v2';
 
-/* ---------- Init ---------- */
+/* Default color palette (user can choose one) */
+const COLOR_PALETTE = [
+  {name:'Blau', hex:'#1976D2'},
+  {name:'Grün', hex:'#2E7D32'},
+  {name:'Rot', hex:'#D32F2F'},
+  {name:'Lila', hex:'#6A1B9A'},
+  {name:'Gelb', hex:'#F9A825'},
+  {name:'Orange', hex:'#FB8C00'},
+  {name:'Türkis', hex:'#00897B'},
+  {name:'Grau', hex:'#616161'}
+];
+
+/* Load events from storage (array of objects) */
+let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+/* event structure:
+{
+ id: 'ev_xxx',
+ groupId: 'grp_xxx' or null,
+ date: 'YYYY-MM-DD',
+ title: 'Text',
+ startTime: 'HH:MM' or '',
+ endTime: 'HH:MM' or '',
+ type: 'default'|'private'|'work',
+ color: '#hex' (optional)
+}
+*/
+
+let viewDate = new Date(); // which month to show
+
+/* --- DOM refs --- */
+const calendarGrid = document.getElementById('calendarGrid');
+const monthTitle = document.getElementById('monthTitle');
+const prevMonthBtn = document.getElementById('prevMonth');
+const nextMonthBtn = document.getElementById('nextMonth');
+const addEventBtn = document.getElementById('addEventBtn');
+const freeInput = document.getElementById('freeInput');
+const typeSelect = document.getElementById('typeSelect');
+const weeksList = document.getElementById('weeksList');
+const micBtn = document.getElementById('micBtn');
+const googleImportBtn = document.getElementById('googleImportBtn');
+const clearBtn = document.getElementById('clearBtn');
+const icsExportBtn = document.getElementById('icsExportBtn');
+const colorPopup = document.getElementById('colorPopup');
+
+/* --- Init --- */
 document.addEventListener('DOMContentLoaded', () => {
-  // restore theme
+  // Restore theme
   const savedTheme = localStorage.getItem(THEME_KEY);
   if(savedTheme) document.body.dataset.theme = savedTheme;
+  updateMonthTitle();
   renderMonth(viewDate);
   renderWeeks();
-  updateMonthTitle();
 });
 
-/* ---------- Theme toggle (persist) ---------- */
+/* ---------- Theme toggle ---------- */
 document.getElementById('themeToggle').addEventListener('click', () => {
   const body = document.body;
   const newTheme = body.dataset.theme === 'light' ? 'dark' : 'light';
   body.dataset.theme = newTheme;
-  // store
   localStorage.setItem(THEME_KEY, newTheme);
 });
 
-/* ---------- Month navigation ---------- */
-document.getElementById('prevMonth').addEventListener('click', ()=>{ changeMonth(-1); });
-document.getElementById('nextMonth').addEventListener('click', ()=>{ changeMonth(1); });
-
+/* ---------- Month nav ---------- */
+prevMonthBtn.addEventListener('click', ()=>{ changeMonth(-1); });
+nextMonthBtn.addEventListener('click', ()=>{ changeMonth(1); });
 function changeMonth(offset){
   viewDate.setMonth(viewDate.getMonth() + offset);
-  renderMonth(viewDate);
   updateMonthTitle();
+  renderMonth(viewDate);
 }
 
 /* ---------- Add / Clear ---------- */
-document.getElementById('addEventBtn').addEventListener('click', () => {
-  const raw = document.getElementById('freeInput').value.trim();
-  const type = document.getElementById('typeSelect').value;
+addEventBtn.addEventListener('click', ()=> {
+  const raw = freeInput.value.trim();
+  const type = typeSelect.value;
   if(!raw) return alert('Bitte Text eingeben.');
-
-  // parse can return array of events
   const parsed = parseInputToEvent(raw, type);
   if(!parsed || parsed.length === 0) return alert('Konnte keine Termine erkennen.');
-
-  // append and persist
+  // append, persist
   events.push(...parsed);
   saveEvents();
-  document.getElementById('freeInput').value = '';
+  freeInput.value = '';
   renderMonth(viewDate);
   renderWeeks();
 });
 
-/* "Kalender zurücksetzen" */
-document.getElementById('clearBtn').addEventListener('click', ()=> {
+/* clear/reset */
+clearBtn.addEventListener('click', ()=> {
   if(confirm('Alle Events löschen?')) {
     events = [];
     saveEvents();
@@ -458,183 +495,153 @@ function saveEvents(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 }
 
-/* ---------- Rendering ---------- */
-
+/* ---------- Rendering month ---------- */
 function updateMonthTitle(){
   const monthNames = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
-  document.getElementById('monthTitle').textContent = `${monthNames[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
+  monthTitle.textContent = `${monthNames[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
 }
 
 function renderMonth(date){
-  const grid = document.getElementById('calendarGrid');
-  grid.innerHTML = '';
-
+  calendarGrid.innerHTML = '';
   const year = date.getFullYear();
   const month = date.getMonth();
-
-  // first day of month
   const first = new Date(year, month, 1);
   const startDay = first.getDay(); // 0..6 Sun..Sat
-  // convert to Monday-first index: leading empties
   const leadingEmpty = (startDay + 6) % 7;
-
   const daysInMonth = new Date(year, month+1, 0).getDate();
-
-  // fill empties
   for(let i=0;i<leadingEmpty;i++){
-    const d = document.createElement('div');
-    d.className = 'day';
-    d.style.opacity = 0.5;
-    grid.appendChild(d);
+    const d = document.createElement('div'); d.className='day'; d.style.opacity = 0.5; calendarGrid.appendChild(d);
   }
-
   const weekDays = ['Mo','Di','Mi','Do','Fr','Sa','So'];
-
   for(let day=1; day<=daysInMonth; day++){
     const cellDate = new Date(year, month, day);
-    const cell = document.createElement('div');
-    cell.className = 'day';
-
-    const dateNum = document.createElement('div');
-    dateNum.className = 'date-num';
+    const iso = formatYMD(cellDate);
+    const cell = document.createElement('div'); cell.className='day';
+    const dateNum = document.createElement('div'); dateNum.className='date-num';
     const weekdayIndex = cellDate.getDay()===0?6:cellDate.getDay()-1;
     dateNum.innerHTML = `${day}<span class="weekday">${weekDays[weekdayIndex]}</span>`;
     cell.appendChild(dateNum);
-
-    // find events for this date (events stored as YYYY-MM-DD strings)
-    const iso = formatYMD(cellDate);
-    const dayEvents = events.filter(e => e.date === iso)
-                            .sort((a,b)=> timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
-
-    // mark ganztag if any event has no startTime/endTime
+    // find events for iso
+    const dayEvents = events.filter(e => e.date === iso).sort((a,b)=> timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+    // mark ganztag if any event has no times
     const hasAllDay = dayEvents.some(e=> !e.startTime && !e.endTime);
     if(hasAllDay) cell.classList.add('ganztag'); else cell.classList.remove('ganztag');
-
-    // render up to N pills, rest as "+n weitere"
+    // render pills (max N)
     const MAX_PILLS = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-pills-per-day')) || 2;
     if(dayEvents.length){
       for(let i=0;i<Math.min(MAX_PILLS, dayEvents.length); i++){
         const ev = dayEvents[i];
         const pill = document.createElement('div');
-        pill.className = 'event-pill ' + (ev.type === 'private' ? 'type-private' : (ev.type==='work' ? 'type-work' : 'type-default'));
+        pill.className = 'event-pill ' + (ev.type === 'private' ? 'type-private' : (ev.type === 'work' ? 'type-work' : 'type-default'));
+        if(ev.color) pill.style.background = hexToRgba(ev.color, 0.10);
+        if(ev.color) pill.style.borderLeftColor = ev.color;
         const timeText = ev.startTime ? (ev.startTime + (ev.endTime ? ' - ' + ev.endTime : '')) : '';
-        // show small GC icon inside pill
         pill.innerHTML = `<div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${timeText} ${escapeHtml(ev.title)}</div>
-                          <a class="gc-link" title="In Google Kalender öffnen" href="${generateGoogleCalendarUrl(ev)}" target="_blank" rel="noopener noreferrer">📅</a>`;
+                          <div style="display:flex;gap:6px;align-items:center">
+                            <a class="gc-link" title="In Google Kalender öffnen" href="${generateGoogleCalendarUrl(ev)}" target="_blank" rel="noopener">📅</a>
+                          </div>`;
+        // attach event data for color-change via contextmenu/longpress
+        pill.dataset.eventId = ev.id;
+        pill.dataset.groupId = ev.groupId || '';
+        // contextmenu for color
+        pill.addEventListener('contextmenu', (evnt) => {
+          evnt.preventDefault();
+          openColorPopupAt(evnt.clientX, evnt.clientY, ev.dataset.eventId || ev.id, ev.dataset.groupId || ev.groupId);
+        });
+        // also attach long-press for mobile
+        attachLongPress(pill, () => {
+          const rect = pill.getBoundingClientRect();
+          openColorPopupAt(rect.left + 10, rect.top + 10, ev.id, ev.groupId || '');
+        });
         cell.appendChild(pill);
       }
       if(dayEvents.length > MAX_PILLS){
-        const more = document.createElement('div');
-        more.className = 'tiny-muted';
-        more.style.marginTop = '6px';
-        more.textContent = `+${dayEvents.length - MAX_PILLS} weitere`;
+        const more = document.createElement('div'); more.className='tiny-muted'; more.style.marginTop='6px'; more.textContent = `+${dayEvents.length - MAX_PILLS} weitere`;
         cell.appendChild(more);
       }
     }
-
-    // border color by type
-    if(dayEvents.some(e=> e.type==='private')) {
-      cell.style.border = '2px solid #d32f2f';
-    } else if(dayEvents.some(e=> e.type==='work')) {
-      cell.style.border = '2px solid #2e7d32';
-    } else if(dayEvents.length>0){
-      cell.style.border = '2px solid rgba(255,255,255,0.06)';
-    } else {
-      cell.style.border = '1px solid rgba(255,255,255,0.04)';
-    }
-
-    grid.appendChild(cell);
+    // border color
+    if(dayEvents.some(e=> e.type==='private')) cell.style.border = '2px solid #d32f2f';
+    else if(dayEvents.some(e=> e.type==='work')) cell.style.border = '2px solid #2e7d32';
+    else if(dayEvents.length>0) cell.style.border = '2px solid rgba(255,255,255,0.06)';
+    else cell.style.border = '1px solid rgba(255,255,255,0.04)';
+    calendarGrid.appendChild(cell);
   }
 }
 
-/* Render weekly grouped list (next 8 weeks) */
+/* ---------- Weeks list ---------- */
 function renderWeeks(){
-  const container = document.getElementById('weeksList');
+  const container = weeksList;
   container.innerHTML = '';
-
   const today = startOfDay(new Date());
   const weeks = [];
-
-  // next 8 weeks
   for(let w=0; w<8; w++){
     const start = addDays(startOfWeek(today), w*7);
     const end = addDays(start, 6);
     const evs = events.filter(e => {
       const d = parseYMD(e.date);
       return d >= start && d <= end;
-    }).sort((a,b)=> (new Date(a.date + 'T' + (a.startTime||'00:00'))) - (new Date(b.date + 'T' + (b.startTime||'00:00'))));
-
-    if(evs.length>0){
-      weeks.push({start, end, events: evs});
-    }
+    }).sort((a,b)=> new Date(a.date+'T'+(a.startTime||'00:00')) - new Date(b.date+'T'+(b.startTime||'00:00')));
+    if(evs.length) weeks.push({start,end,events:evs});
   }
-
-  // cap total displayed events to avoid long lists
-  const MAX_WEEK_EVENTS = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-weeklist-events')) || 50;
+  const MAX_WEEK_EVENTS = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-weeklist-events')) || 80;
   let totalShown = 0;
-
-  weeks.forEach(wk=>{
-    if(totalShown >= MAX_WEEK_EVENTS) return;
-    const item = document.createElement('div');
-    item.className = 'week-item';
-    const title = document.createElement('div');
-    title.className = 'week-title';
+  for(const wk of weeks){
+    if(totalShown >= MAX_WEEK_EVENTS) break;
+    const item = document.createElement('div'); item.className='week-item';
+    const title = document.createElement('div'); title.className='week-title';
     title.innerHTML = `<div>${formatShort(wk.start)} — ${formatShort(wk.end)}</div><div class="tiny-muted">${wk.events.length} Termine</div>`;
     item.appendChild(title);
-
     for(const ev of wk.events){
       if(totalShown >= MAX_WEEK_EVENTS) break;
-      const row = document.createElement('div');
-      row.className = 'event-row ' + (ev.type === 'private' ? 'private' : (ev.type==='work' ? 'work' : 'default'));
+      const row = document.createElement('div'); row.className='event-row ' + (ev.type==='private'?'private':(ev.type==='work'?'work':'default'));
       const timeText = ev.startTime ? (ev.startTime + (ev.endTime ? ' - ' + ev.endTime : '')) : '';
-      row.innerHTML = `<div style="font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${timeText} ${escapeHtml(ev.title)}</div>
+      row.innerHTML = `<div style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${timeText} ${escapeHtml(ev.title)}</div>
                        <div class="tiny-muted">${formatDayTime(ev.date, ev.startTime)}</div>`;
-      // click opens GC for that event
+      // color indicator
+      if(ev.color){
+        const dot = document.createElement('span');
+        dot.className = 'palette-dot';
+        dot.style.background = ev.color;
+        dot.style.marginRight = '8px';
+        row.insertBefore(dot, row.firstChild);
+      }
+      // click opens GC
       row.addEventListener('click', ()=> {
         window.open(generateGoogleCalendarUrl(ev), '_blank', 'noopener');
+      });
+      // contextmenu to color
+      row.addEventListener('contextmenu', (e)=> {
+        e.preventDefault();
+        openColorPopupAt(e.clientX, e.clientY, ev.id, ev.groupId || '');
+      });
+      attachLongPress(row, ()=> {
+        const rect = row.getBoundingClientRect();
+        openColorPopupAt(rect.left + 10, rect.top + 10, ev.id, ev.groupId || '');
       });
       item.appendChild(row);
       totalShown++;
     }
-
     container.appendChild(item);
-  });
-
-  if(weeks.length===0 || totalShown===0){
+  }
+  if(totalShown === 0){
     container.innerHTML = `<div class="tiny-muted">Keine kommenden Termine.</div>`;
   }
 }
 
-/* ---------- Parsing: robust, supports many phrases ---------- */
-/*
-  Returns array of event objects:
-  { id, date: 'YYYY-MM-DD', title, startTime, endTime, type }
-*/
+/* ---------- Parser (extended) ---------- */
+/* Returns array of event objects (multiple for ranges/repeats), each event may have groupId if related */
 function parseInputToEvent(text, type='default'){
-  // Normalize
-  let t = (text || '').trim();
-  if(!t) return [];
-  let originalText = t;
-  t = t.toLowerCase();
-
+  if(!text) return [];
+  const original = text.trim();
+  let t = original.toLowerCase().trim();
   const now = new Date();
   const today = startOfDay(now);
-  const eventsOut = [];
+  const OUT = [];
+  // use groupId for related multi-day events
+  const groupId = 'grp_' + Math.random().toString(36).slice(2,9);
 
-  // Helper: push event (Date or date-string)
-  function pushEventFromDate(d, title, sTime='', eTime=''){
-    const dt = (d instanceof Date) ? startOfDay(d) : startOfDay(parseYMD(d));
-    eventsOut.push({
-      id: 'ev_' + Math.random().toString(36).slice(2,9),
-      date: formatYMD(dt),
-      title: title || originalText,
-      startTime: sTime || '',
-      endTime: eTime || '',
-      type: type
-    });
-  }
-
-  // 1) time detection (ranges like 18-20 or 18:30-20:00) and "um 18" patterns
+  // 1) detect time ranges or single times
   let startTime = '', endTime = '';
   const timeRange = t.match(/(\d{1,2}(?::\d{2})?)\s*[-–]\s*(\d{1,2}(?::\d{2})?)/);
   if(timeRange){
@@ -650,164 +657,481 @@ function parseInputToEvent(text, type='default'){
     }
   }
 
-  // 2) check for explicit date (dd/mm/yyyy or dd.mm.yyyy)
-  const explicitDateMatch = t.match(/(\d{1,2}[\.\/]\d{1,2}[\.\/]\d{2,4})/);
-  if(explicitDateMatch){
-    const parsed = parseDateString(explicitDateMatch[1]);
-    if(parsed) {
-      // Remove date token
-      t = t.replace(explicitDateMatch[0], '').trim();
-      pushEventFromDate(parsed, t || originalText, startTime, endTime);
-      return eventsOut;
+  // Helper to create event object
+  function makeEventObj(dateObj, title){
+    return {
+      id: 'ev_' + Math.random().toString(36).slice(2,9),
+      groupId: title && title.startsWith('[multi]') ? groupId : null,
+      date: formatYMD(dateObj),
+      title: title || original,
+      startTime: startTime || '',
+      endTime: endTime || '',
+      type: type,
+      color: null
+    };
+  }
+
+  // date literal dd.mm.yyyy or dd/mm/yyyy
+  const explicitDate = t.match(/(\d{1,2}[\.\/]\d{1,2}[\.\/]\d{2,4})/);
+  if(explicitDate){
+    const parsed = parseDateString(explicitDate[1]);
+    if(parsed){
+      const leftover = t.replace(explicitDate[0],'').trim() || original;
+      OUT.push(makeEventObj(parsed, leftover));
+      return OUT;
     }
   }
 
-  // 3) special words & patterns
-  // weekend keywords: "am wochenende" or standalone "wochenende"
-  if(/\b(am\s+)?wochenende\b/.test(t)){
-    // ensure we always pick upcoming Saturday & Sunday (the next weekend)
-    const nextSat = nextWeekdayFrom(today, 'samstag'); // returns Sat >= today? returns next occurrence
-    const nextSun = nextWeekdayFrom(today, 'sonntag');
-    pushEventFromDate(nextSat, t || originalText, startTime, endTime);
-    pushEventFromDate(nextSun, t || originalText, startTime, endTime);
-    return eventsOut;
-  }
-
-  // words for today/morgen/übermorgen
-  if(/\bübermorgen\b/.test(t)){
-    pushEventFromDate(addDays(today,2), t.replace(/\bübermorgen\b/,'').trim() || originalText, startTime, endTime);
-    return eventsOut;
-  }
-  if(/\bmorgen\b/.test(t)){
-    pushEventFromDate(addDays(today,1), t.replace(/\bmorgen\b/,'').trim() || originalText, startTime, endTime);
-    return eventsOut;
-  }
-  if(/\bheute\b/.test(t)){
-    pushEventFromDate(today, t.replace(/\bheute\b/,'').trim() || originalText, startTime, endTime);
-    return eventsOut;
-  }
-
-  // "nächste woche [Wochentag]" or "nächste woche jeden [Wochentag]"
-  let m;
-  if((m = t.match(/nächste\s+woche(?:\s+jeden)?\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/))){
-    const wd = m[1];
-    const startNextWeek = addDays(startOfWeek(today), 7);
-    const dateFound = nextWeekdayFrom(startNextWeek, wd);
-    pushEventFromDate(dateFound, t.replace(m[0],'').trim() || originalText, startTime, endTime);
-    return eventsOut;
-  }
-
-  // "jeden X im (diesem|aktuellen) monat" or "jeden X im nächsten monat"
-  if((m = t.match(/jeden\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)(?:\s+im\s+(diesem|aktuellen|nächsten)\s+monat)?/))){
-    const weekdayName = m[1];
-    const monthQualifier = m[2]; // may be undefined
-    let targetMonthDate;
-    if(monthQualifier && /nächsten/i.test(monthQualifier)){
-      targetMonthDate = new Date(today.getFullYear(), today.getMonth()+1, 1);
+  // "bis ..." patterns: capture until end target (e.g., "bis übermorgen", "bis nächste woche freitag", "bis zum wochenende")
+  // We'll attempt to detect a "bis" and compute inclusive dates
+  const bisMatch = t.match(/(bis(?:\s+zum|\s+zur|\s+zu)?)\s+(.+)$/);
+  if(bisMatch){
+    const targetPhrase = bisMatch[2].trim();
+    // compute endDate based on targetPhrase
+    let endDate = null;
+    // "übermorgen"
+    if(/\bübermorgen\b/.test(targetPhrase)) endDate = addDays(today,2);
+    else if(/\bmorgen\b/.test(targetPhrase)) endDate = addDays(today,1);
+    else if(/\bheute\b/.test(targetPhrase)) endDate = today;
+    else if(/\bzum\s+wochenende\b|\bzum\s+ende\s+der\s+woche\b|\bwochenende\b/.test(targetPhrase)) {
+      // until weekend = up to Friday (user spec earlier: "bis zum Wochenende" -> Mon-Fri)
+      endDate = addDays(startOfWeek(today), 4); // Friday of current week
     } else {
-      // default: current month
-      targetMonthDate = new Date(today.getFullYear(), today.getMonth(), 1);
-    }
-    // get all occurrences of that weekday inside that month
-    const days = getAllWeekdaysInMonth(weekdayName, targetMonthDate);
-    for(const d of days){
-      // if target month is current one and date < today => maybe include only future dates?
-      // The user asked "im aktuellen Monat" -> include all in that month (even past?) — we interpret as all days in month (but to be practical, include only days >= today)
-      if(targetMonthDate.getMonth() === today.getMonth()){
-        if(d >= today) pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+      // "nächste woche freitag" or "nächsten freitag"
+      const m = targetPhrase.match(/(nächste(?:n|r)?\s+woche)?\s*(nächsten|nächste|nächster)?\s*(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+      if(m){
+        if(/nächste\s+woche/.test(targetPhrase)){
+          const startNext = addDays(startOfWeek(today), 7);
+          const wd = m[3];
+          endDate = nextWeekdayFrom(startNext, wd);
+        } else {
+          endDate = nextWeekdayFrom(today, m[3]);
+        }
       } else {
-        // next month -> include all in next month
-        pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+        // "nächste woche" as general -> end = end of next week
+        if(/\bnächste\s+woche\b/.test(targetPhrase)){
+          endDate = addDays(startOfWeek(today), 13); // next week's Sunday
+        }
+        // "bis ende des monats"
+        if(/\bend(e)?\s+des\s+monats|ende\s+des\s+monats|bis\s+ende\s+des\s+monats/.test(targetPhrase)){
+          endDate = endOfMonth(today);
+        }
+        // "bis nächste Woche Freitag" fallback
+        const m2 = targetPhrase.match(/(nächste(?:n|r)?\s+woche\s+)?(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+        if(m2 && !endDate){
+          if(m2[1]) {
+            const startNext = addDays(startOfWeek(today), 7);
+            endDate = nextWeekdayFrom(startNext, m2[2]);
+          } else {
+            endDate = nextWeekdayFrom(today, m2[2]);
+          }
+        }
       }
     }
-    return eventsOut;
+
+    if(endDate){
+      // Now determine range start: default = today (or optionally a phrase like "ab Montag")
+      let startDate = today;
+      const abMatch = t.match(/ab\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+      if(abMatch){
+        const sd = nextWeekdayFrom(today, abMatch[1]);
+        // if "ab Montag" and we are after monday of this week, nextWeekdayFrom returns next occurrence; if we want current week's Monday we might need startOfWeek.
+        startDate = sd;
+      } else {
+        // "in der woche ab montag" pattern
+        const inWeekMatch = t.match(/(?:in\s+der|diese|aktuell(?:e)?)\s+woche.*ab\s+(montag|dienstag|mittwoch|donnerstag|freitag)/);
+        if(inWeekMatch){
+          // find Monday of current week
+          const startWeek = startOfWeek(today);
+          startDate = nextWeekdayFrom(startWeek, inWeekMatch[1]);
+        }
+      }
+      // Ensure start <= end
+      let iter = startOfDay(startDate);
+      while(iter <= endDate){
+        OUT.push({
+          id: 'ev_' + Math.random().toString(36).slice(2,9),
+          groupId: groupId,
+          date: formatYMD(iter),
+          title: original.replace(bisMatch[0],'').trim() || original,
+          startTime: startTime || '',
+          endTime: endTime || '',
+          type: type,
+          color: null
+        });
+        iter = addDays(iter, 1);
+      }
+      return OUT;
+    }
   }
 
-  // "jeden X" (repeat weekly for future weeks) - default behaviour: create repeated entries for next 16 weeks
+  // Pattern "jeden tag" optionally bounded by "bis ..."
+  if(/\bjeden\s+tag\b/.test(t) || /\btäglich\b/.test(t)){
+    // Check for bound "bis X"
+    let boundDate = null;
+    let bm;
+    if((bm = t.match(/bis\s+übermorgen/))) boundDate = addDays(today,2);
+    else if((bm = t.match(/bis\s+morgen/))) boundDate = addDays(today,1);
+    else if((bm = t.match(/bis\s+zum\s+wochenende|bis\s+zum\s+ende\s+der\s+woche|bis\s+zum\s+freitag|bis\s+freitag/))) {
+      // until weekend => Monday..Friday this week
+      boundDate = addDays(startOfWeek(today), 4);
+    } else if((bm = t.match(/bis\s+nächste(?:n|r)?\s+woche\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/))){
+      const wd = bm[1]; const startNext = addDays(startOfWeek(today), 7); boundDate = nextWeekdayFrom(startNext, wd);
+    } else if((bm = t.match(/bis\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/))){
+      boundDate = nextWeekdayFrom(today, bm[1]);
+    } else if((bm = t.match(/bis\s+ende\s+des\s+monats|bis\s+ende\s+des\s+monat/))) { boundDate = endOfMonth(today); }
+    // default maximum lookahead if no bound: 30 days
+    const maxDays = boundDate ? Math.ceil((boundDate - today) / (1000*60*60*24)) : 30;
+    for(let i=0;i<=maxDays;i++){
+      const d = addDays(today,i);
+      OUT.push({
+        id: 'ev_' + Math.random().toString(36).slice(2,9),
+        groupId: groupId,
+        date: formatYMD(d),
+        title: original.replace(/\bjeden\s+tag\b|\btäglich\b/,'').trim() || original,
+        startTime: startTime || '',
+        endTime: endTime || '',
+        type: type,
+        color: null
+      });
+    }
+    return OUT;
+  }
+
+  // "jeden <weekday> (im nächsten monat|im aktuellen monat|in diesem monat|im monat)"
+  let m;
+  if((m = t.match(/jeden\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)(?:\s+im\s+(diesem|aktuellen|nächsten)\s+monat)?/))){
+    const weekday = m[1];
+    const qualifier = m[2];
+    let targetMonthStart;
+    if(qualifier && /nächsten/.test(qualifier)) targetMonthStart = new Date(now.getFullYear(), now.getMonth()+1, 1);
+    else targetMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const days = getAllWeekdaysInMonth(weekday, targetMonthStart);
+    for(const d of days){
+      // If current month and day < today, skip (reasonable)
+      if(targetMonthStart.getMonth() === today.getMonth()){
+        if(d >= today) OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date:formatYMD(d), title: original.replace(m[0],'').trim()||original, startTime, endTime, type, color:null });
+      } else {
+        OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date:formatYMD(d), title: original.replace(m[0],'').trim()||original, startTime, endTime, type, color:null });
+      }
+    }
+    return OUT;
+  }
+
+  // "jeden <weekday>" (no monthly qualifier) -> generate next 16 weeks as repeated weekly events
   if((m = t.match(/jeden\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/))){
-    const weekdayName = m[1];
-    // create occurrences for next 16 occurrences (configurable)
-    let count = 16;
-    let base = today;
+    const weekday = m[1];
+    const count = 52; // up to a year
     for(let i=0;i<count;i++){
-      const candidate = nextWeekdayFrom(addDays(base, i*7), weekdayName);
-      if(candidate) pushEventFromDate(candidate, t.replace(m[0],'').trim() || originalText, startTime, endTime);
+      const candidate = nextWeekdayFrom(addDays(today, i*7), weekday);
+      if(candidate) OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(candidate), title: original.replace(m[0],'').trim()||original, startTime, endTime, type, color:null });
     }
-    return eventsOut;
+    return OUT;
   }
 
-  // "in der woche" / "die ganze woche" / "alle werktage"
-  if(/\b(die ganze woche|in der woche|alle werktage|werktage|woche)\b/.test(t)){
-    // By default interpret as current week (Mon-Fri)
-    const start = startOfWeek(today);
-    for(let i=0;i<5;i++){
-      pushEventFromDate(addDays(start, i), t.replace(/\b(die ganze woche|in der woche|alle werktage|werktage|woche)\b/,'').trim() || originalText, startTime, endTime);
+  // "in der/diese/aktuelle Woche ab Montag jeden Tag bis Mittwoch" etc.
+  // detect "in der woche" or "diese woche" optionally with "ab X bis Y"
+  if(/\b(in der woche|diese woche|aktuelle woche|diese woche)\b/.test(t)){
+    // find 'ab X' and 'bis Y'
+    const ab = t.match(/ab\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+    const bis = t.match(/bis\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+    const startWeek = startOfWeek(today);
+    const startDay = ab ? nextWeekdayFrom(startWeek, ab[1]) : startWeek;
+    const endDay = bis ? nextWeekdayFrom(startWeek, bis[1]) : addDays(startWeek,6);
+    let iter = startOfDay(startDay);
+    while(iter <= endDay){
+      OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:'grp_'+groupId, date: formatYMD(iter), title: original.replace(/in der woche|diese woche|aktuelle woche|ab\s+\w+|bis\s+\w+/g,'').trim()||original, startTime, endTime, type, color:null});
+      iter = addDays(iter,1);
     }
-    return eventsOut;
+    return OUT;
   }
 
-  // "am nächsten <weekday>" OR "nächsten <weekday>" OR "nächster <weekday>"
-  if((m = t.match(/\b(am\s+)?nächs(?:te|ter|ten)\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/))){
-    const weekdayName = m[2];
-    // next weekday after today (not today)
-    const d = nextWeekdayFrom(today, weekdayName);
-    pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
-    return eventsOut;
+  // "nächste woche ab Montag jeden Tag bis Mittwoch" similar to above but for next week
+  if(/\bnächste(?:n|r)?\s+woche\b/.test(t)){
+    const ab = t.match(/ab\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+    const bis = t.match(/bis\s+(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)/);
+    const startWeek = addDays(startOfWeek(today), 7);
+    const startDay = ab ? nextWeekdayFrom(startWeek, ab[1]) : startWeek;
+    const endDay = bis ? nextWeekdayFrom(startWeek, bis[1]) : addDays(startWeek,6);
+    let iter = startOfDay(startDay);
+    while(iter <= endDay){
+      OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(iter), title: original.replace(/\bnächste(?:n|r)?\s+woche|ab\s+\w+|bis\s+\w+/g,'').trim()||original, startTime, endTime, type, color:null});
+      iter = addDays(iter,1);
+    }
+    return OUT;
   }
 
-  // bare "am <weekday>" or "<weekday> laufen" etc. -> next occurrence (if today is the day, choose next occurrence?)
+  // weekend (am Wochenende or weekend)
+  if(/\b(am\s+)?wochenende\b/.test(t)){
+    const sat = nextWeekdayFrom(today,'samstag');
+    const sun = nextWeekdayFrom(today,'sonntag');
+    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date:formatYMD(sat), title: original.replace(/\b(am\s+)?wochenende\b/,'').trim()||original, startTime, endTime, type, color:null});
+    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date:formatYMD(sun), title: original.replace(/\b(am\s+)?wochenende\b/,'').trim()||original, startTime, endTime, type, color:null});
+    return OUT;
+  }
+
+  // 'übermorgen' alone -> event in two days
+  if(/\bübermorgen\b/.test(t)){
+    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(addDays(today,2)), title: original.replace(/\bübermorgen\b/,'').trim()||original, startTime, endTime, type, color:null});
+    return OUT;
+  }
+  if(/\bmorgen\b/.test(t)){
+    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(addDays(today,1)), title: original.replace(/\bmorgen\b/,'').trim()||original, startTime, endTime, type, color:null});
+    return OUT;
+  }
+  if(/\bheute\b/.test(t)){
+    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(today), title: original.replace(/\bheute\b/,'').trim()||original, startTime, endTime, type, color:null});
+    return OUT;
+  }
+
+  // "am <weekday>" or bare weekday e.g. "Donnerstag laufen" -> next occurrence
   if((m = t.match(/\b(am\s+)?(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/))){
-    const weekdayName = m[2];
-    const d = nextWeekdayFrom(today, weekdayName);
-    pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
-    return eventsOut;
+    const wd = m[2];
+    const d = nextWeekdayFrom(today, wd);
+    OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(d), title: original.replace(m[0],'').trim()||original, startTime, endTime, type, color:null});
+    return OUT;
   }
 
-  // month phrases: "diesen monat", "im aktuellen monat", "nächsten monat"
-  if(/\b(dieser monat|diesen monat|im aktuellen monat|aktuellen monat)\b/.test(t)){
-    // interpret as every day of current month? or used with "jeden X" earlier.
-    // We'll treat "die ganze monat" as every day of current month when used alone
-    const start = new Date(today.getFullYear(), today.getMonth(), 1);
-    const end = new Date(today.getFullYear(), today.getMonth()+1, 0);
-    for(let d = start.getDate(); d<=end.getDate(); d++){
-      const dt = new Date(start.getFullYear(), start.getMonth(), d);
-      if(dt >= today) pushEventFromDate(dt, t.replace(/\b(dieser monat|diesen monat|im aktuellen monat|aktuellen monat)\b/,'').trim() || originalText, startTime, endTime);
-    }
-    return eventsOut;
-  }
-  if(/\b(nächster monat|im nächsten monat|nächsten monat)\b/.test(t)){
-    const start = new Date(today.getFullYear(), today.getMonth()+1, 1);
-    const end = new Date(start.getFullYear(), start.getMonth()+1, 0);
-    for(let d = start.getDate(); d<=end.getDate(); d++){
-      const dt = new Date(start.getFullYear(), start.getMonth(), d);
-      pushEventFromDate(dt, t.replace(/\b(nächster monat|im nächsten monat|nächsten monat)\b/,'').trim() || originalText, startTime, endTime);
-    }
-    return eventsOut;
-  }
-
-  // If nothing matched: fallback -> next occurrence or today
-  // If phrase contains a weekday word implicitly, capture it
-  if((m = t.match(/\b(montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/))){
-    const weekdayName = m[1];
-    const d = nextWeekdayFrom(today, weekdayName);
-    pushEventFromDate(d, t.replace(m[0],'').trim() || originalText, startTime, endTime);
-    return eventsOut;
-  }
-
-  // Fallback: place on today
-  pushEventFromDate(today, t || originalText, startTime, endTime);
-  return eventsOut;
+  // default fallback -> today
+  OUT.push({ id:'ev_'+Math.random().toString(36).slice(2,9), groupId:groupId, date: formatYMD(today), title: original, startTime, endTime, type, color:null });
+  return OUT;
 }
 
-/* ---------- Helper Utilities ---------- */
+/* ---------- Color Picker Logic ---------- */
+let currentColorTarget = null; // {eventId, groupId}
+function openColorPopupAt(x, y, eventId, groupId){
+  // build palette
+  colorPopup.innerHTML = '';
+  COLOR_PALETTE.forEach(item => {
+    const btn = document.createElement('button');
+    btn.style.width = '28px';
+    btn.style.height = '28px';
+    btn.style.borderRadius = '6px';
+    btn.style.border = '1px solid rgba(0,0,0,0.1)';
+    btn.style.background = item.hex;
+    btn.title = item.name;
+    btn.style.cursor = 'pointer';
+    btn.addEventListener('click', () => {
+      applyColorToEventOrGroup(item.hex, eventId, groupId);
+      closeColorPopup();
+    });
+    colorPopup.appendChild(btn);
+  });
+  colorPopup.style.left = x + 'px';
+  colorPopup.style.top = y + 'px';
+  colorPopup.style.display = 'flex';
+  currentColorTarget = {eventId, groupId};
+  // clicking outside closes it
+  setTimeout(()=> {
+    window.addEventListener('click', outsideColorClick);
+  }, 10);
+}
+function closeColorPopup(){
+  colorPopup.style.display = 'none';
+  colorPopup.innerHTML = '';
+  window.removeEventListener('click', outsideColorClick);
+  currentColorTarget = null;
+}
+function outsideColorClick(e){ if(!colorPopup.contains(e.target)) closeColorPopup(); }
 
+function applyColorToEventOrGroup(hex, eventId, groupId){
+  if(groupId){
+    // apply to all events with same groupId
+    events = events.map(ev => ev.groupId === groupId ? {...ev, color: hex} : ev);
+  } else {
+    events = events.map(ev => ev.id === eventId ? {...ev, color: hex} : ev);
+  }
+  saveEvents();
+  renderMonth(viewDate);
+  renderWeeks();
+}
+
+/* ---------- Long-press helper for mobile ---------- */
+function attachLongPress(elem, callback){
+  let timer = null;
+  let moved = false;
+  const start = (e) => {
+    moved = false;
+    timer = setTimeout(()=> {
+      callback();
+      timer = null;
+    }, 600);
+  };
+  const cancel = ()=> { if(timer) { clearTimeout(timer); timer = null; } };
+  elem.addEventListener('touchstart', start);
+  elem.addEventListener('mousedown', start);
+  elem.addEventListener('touchmove', ()=> { moved=true; cancel(); });
+  elem.addEventListener('mousemove', ()=> { moved=true; cancel(); });
+  elem.addEventListener('touchend', cancel);
+  elem.addEventListener('mouseup', cancel);
+  elem.addEventListener('mouseleave', cancel);
+}
+
+/* ---------- Speech recognition ---------- */
+let recognition = null;
+let listening = false;
+function initSpeech(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition) return null;
+  const rec = new SpeechRecognition();
+  rec.lang = 'de-DE';
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  return rec;
+}
+// beep using AudioContext - short sinustone
+function playBeep(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.value = 1000; // Hz
+    g.gain.value = 0.0008; // very quiet
+    o.connect(g);
+    g.connect(ctx.destination);
+    o.start(0);
+    setTimeout(()=> {
+      o.stop();
+      ctx.close();
+    }, 100); // 100 ms
+  }catch(e){ /* ignore if not allowed */ }
+}
+
+micBtn.addEventListener('click', async () => {
+  // Try to request permission and start recognition
+  if(!recognition) recognition = initSpeech();
+  if(!recognition){
+    alert('Spracherkennung wird in diesem Browser nicht unterstützt (verwende Chrome/Edge für beste Ergebnisse).');
+    return;
+  }
+  try{
+    // play beep and start
+    playBeep();
+    recognition.start();
+    listening = true;
+    micBtn.textContent = '🎙️ …';
+  }catch(err){
+    console.error(err);
+  }
+});
+
+if(window.SpeechRecognition || window.webkitSpeechRecognition){
+  recognition = initSpeech();
+  recognition.addEventListener('result', (evt) => {
+    const text = evt.results[0][0].transcript;
+    // place in input and parse
+    freeInput.value = text;
+    // small delay to allow UI updating
+    setTimeout(()=> {
+      addEventBtn.click();
+    }, 150);
+  });
+  recognition.addEventListener('end', ()=> {
+    listening = false;
+    micBtn.textContent = '🎙';
+  });
+  recognition.addEventListener('error', (e)=> {
+    listening = false;
+    micBtn.textContent = '🎙';
+    console.error('Speech error', e);
+  });
+}
+
+/* ---------- Google import (open each event in new tab) ---------- */
+googleImportBtn.addEventListener('click', ()=> {
+  if(!events || events.length === 0) return alert('Keine Events zum Exportieren.');
+  const LIMIT = 120; // safe limit to avoid popup block
+  const toExport = events.slice(0, LIMIT);
+  for(const ev of toExport){
+    const url = generateGoogleCalendarUrl(ev);
+    window.open(url, '_blank', 'noopener');
+  }
+  if(events.length > LIMIT) alert(`Es wurden ${LIMIT} Einträge geöffnet. Weitere ${events.length - LIMIT} wurden nicht geöffnet (Limit). Verwende .ics Export für Bulk-Import.`);
+});
+
+/* ---------- ICS export (download as single .ics) ---------- */
+icsExportBtn.addEventListener('click', ()=> {
+  if(!events || events.length===0) return alert('Keine Events zum Exportieren.');
+  const ics = generateICS(events);
+  const blob = new Blob([ics], {type: 'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'mein_kalender_export.ics';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=> { URL.revokeObjectURL(url); a.remove(); }, 2000);
+});
+
+/* ---------- ICS generation ---------- */
+function generateICS(evList){
+  // simple ICS with VEVENTs, include X-APPLE-CALENDAR-COLOR if color present
+  const CRLF = '\r\n';
+  let out = '';
+  out += 'BEGIN:VCALENDAR' + CRLF;
+  out += 'VERSION:2.0' + CRLF;
+  out += 'PRODID:-//MEIN KALENDER//EN' + CRLF;
+  out += 'CALSCALE:GREGORIAN' + CRLF;
+  out += 'METHOD:PUBLISH' + CRLF;
+  // timezone (naive)
+  for(const ev of evList){
+    const uid = ev.id + '@mein-kalender.local';
+    const dtstart = formatICSDateTime(ev.date, ev.startTime);
+    const dtend = formatICSDateTime(ev.date, ev.endTime || (ev.startTime ? ev.startTime : '23:59'));
+    out += 'BEGIN:VEVENT' + CRLF;
+    out += `UID:${uid}` + CRLF;
+    out += `SUMMARY:${escapeICSText(ev.title)}` + CRLF;
+    out += `DTSTAMP:${formatICSDateTime(new Date())}` + CRLF;
+    out += `DTSTART:${dtstart}` + CRLF;
+    out += `DTEND:${dtend}` + CRLF;
+    if(ev.color){
+      out += `COLOR:${ev.color}` + CRLF;
+      out += `X-APPLE-CALENDAR-COLOR:${ev.color}` + CRLF;
+    }
+    out += 'END:VEVENT' + CRLF;
+  }
+  out += 'END:VCALENDAR' + CRLF;
+  return out;
+}
+function formatICSDateTime(dateOrIso, timeStr){
+  let dt;
+  if(dateOrIso instanceof Date) dt = dateOrIso;
+  else dt = parseYMD(dateOrIso);
+  let hhmmss = '000000';
+  if(timeStr){
+    const t = normalizeTime(timeStr);
+    if(t){
+      const [hh,mm] = t.split(':');
+      hhmmss = hh.padStart(2,'0') + mm.padStart(2,'0') + '00';
+    }
+  }
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth()+1).padStart(2,'0');
+  const d = String(dt.getDate()).padStart(2,'0');
+  return `${y}${m}${d}T${hhmmss}Z`;
+}
+function escapeICSText(s){
+  return (s || '').replace(/\n/g,'\\n').replace(/,/g,'\\,');
+}
+
+/* ---------- Google Calendar URL generator ---------- */
+function generateGoogleCalendarUrl(ev){
+  const formatForUrl = (s) => s.replace(/[-:]/g,'') + 'Z';
+  const startStr = formatForUrl(ev.date + 'T' + (ev.startTime ? ev.startTime.replace(':','') + '00' : '000000'));
+  const endStr = formatForUrl(ev.date + 'T' + (ev.endTime ? ev.endTime.replace(':','') + '00' : '010000'));
+  const text = encodeURIComponent(ev.title);
+  const details = encodeURIComponent('Erstellt via MEIN KALENDER');
+  return `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${startStr}/${endStr}&details=${details}`;
+}
+
+/* ---------- Utilities ---------- */
 function escapeHtml(text){
   if(!text) return '';
   return String(text).replace(/[&<>"'`=\/]/g, function(s) {
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'}[s];
   });
 }
-
 function formatYMD(d){
   const dt = new Date(d);
   const y = dt.getFullYear();
@@ -815,10 +1139,7 @@ function formatYMD(d){
   const day = String(dt.getDate()).padStart(2,'0');
   return `${y}-${m}-${day}`;
 }
-function parseYMD(s){
-  const [y,m,d] = s.split('-').map(Number);
-  return new Date(y,m-1,d);
-}
+function parseYMD(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
 function formatShort(date){
   const d = new Date(date);
   const dd = String(d.getDate()).padStart(2,'0');
@@ -832,19 +1153,11 @@ function formatDayTime(dateStr, timeStr){
   return timeStr ? `${day} • ${timeStr}` : `${day}`;
 }
 function startOfDay(date){ const d = new Date(date); d.setHours(0,0,0,0); return d; }
-function startOfWeek(date){ // Monday as first
-  const d = new Date(date);
-  const day = d.getDay() || 7;
-  d.setDate(d.getDate() - day + 1);
-  return startOfDay(d);
-}
+function startOfWeek(date){ const d = new Date(date); const day = d.getDay() || 7; d.setDate(d.getDate() - day + 1); return startOfDay(d); }
 function addDays(d, days){ const x = new Date(d); x.setDate(x.getDate() + days); return startOfDay(x); }
 function timeToMinutes(t){ if(!t) return 0; const [hh,mm] = t.split(':').map(s=>parseInt(s||'0',10)); return hh*60 + mm; }
-
-/* parse dd.mm.yyyy or dd/mm/yyyy into Date */
 function parseDateString(s){
-  const cleaned = s.replace(/\./g,'/'); // normalize
-  const parts = cleaned.split('/');
+  const cleaned = s.replace(/\./g,'/'); const parts = cleaned.split('/');
   if(parts.length===3){
     let dd = parseInt(parts[0],10), mm = parseInt(parts[1],10), yy = parseInt(parts[2],10);
     if(yy < 100) yy = 2000 + yy;
@@ -852,8 +1165,6 @@ function parseDateString(s){
   }
   return null;
 }
-
-/* time normalizers */
 function normalizeTime(t){
   if(!t) return '';
   const cleaned = String(t).replace('.',':');
@@ -867,12 +1178,13 @@ function normalizeTime(t){
 function addHourToTime(t, h){
   if(!t) return '';
   const [hh,mm] = t.split(':').map(Number);
-  const d = new Date();
-  d.setHours(hh + h, mm || 0, 0, 0);
+  const d = new Date(); d.setHours(hh + h, mm || 0, 0, 0);
   return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
 }
+function endOfMonth(d){ const x = new Date(d.getFullYear(), d.getMonth()+1, 0); return startOfDay(x); }
+function endOfWeek(d){ const x = startOfWeek(d); return addDays(x,6); }
 
-/* get all weekdays inside a month (weekday: 'montag', 'dienstag', ...) */
+/* weekday helpers */
 function getAllWeekdaysInMonth(weekdayName, monthDate){
   const days = [];
   const first = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
@@ -886,48 +1198,59 @@ function getAllWeekdaysInMonth(weekdayName, monthDate){
   }
   return days;
 }
-
-/* nextWeekdayFrom: return next occurrence of weekdayName (e.g. 'donnerstag') starting from given date (strictly after if fromDate is same day) */
 function nextWeekdayFrom(fromDate, weekdayName){
   const wdMap = {montag:1,dienstag:2,mittwoch:3,donnerstag:4,freitag:5,samstag:6,sonntag:0};
   const target = wdMap[weekdayName.toLowerCase()];
   if(target === undefined) return null;
-  const d = new Date(fromDate);
-  d.setHours(0,0,0,0);
+  const d = new Date(fromDate); d.setHours(0,0,0,0);
   let delta = (target - d.getDay() + 7) % 7;
-  if(delta === 0) delta = 7; // next occurrence, not today
+  if(delta === 0) delta = 7;
   d.setDate(d.getDate() + delta);
   return startOfDay(d);
 }
 
-/* ---------- Google Calendar URL generator ---------- */
-function generateGoogleCalendarUrl(ev){
-  // ev.date = 'YYYY-MM-DD', ev.startTime 'HH:MM', ev.endTime 'HH:MM'
-  // Format for Google: YYYYMMDDTHHMMSSZ (we append Z but do not adjust TZ)
-  const formatForUrl = (s) => s.replace(/[-:]/g,'') + 'Z';
-  const startStr = formatForUrl(ev.date + 'T' + (ev.startTime ? ev.startTime.replace(':','') + '00' : '000000'));
-  const endStr = formatForUrl(ev.date + 'T' + (ev.endTime ? ev.endTime.replace(':','') + '00' : '010000'));
-  const text = encodeURIComponent(ev.title);
-  const details = encodeURIComponent('Erstellt via MEIN KALENDAR');
-  return `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${startStr}/${endStr}&details=${details}`;
+/* convert hex color to rgba for background tints */
+function hexToRgba(hex, alpha){
+  if(!hex) return '';
+  const h = hex.replace('#','');
+  const bigint = parseInt(h,16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r},${g},${b},${alpha})`;
 }
 
-/* ---------- Google Import Button: open each event in new tab (user-initiated click) ---------- */
-document.getElementById('googleImportBtn').addEventListener('click', () => {
-  if(!events || events.length === 0) return alert('Keine Events zum Exportieren.');
-  // limit export to first 200 to avoid popup issues
-  const limit = 200;
-  const toExport = events.slice(0, limit);
-  // open each in its own tab (may trigger popup blocker if too many)
-  for(const ev of toExport){
-    const url = generateGoogleCalendarUrl(ev);
-    window.open(url, '_blank', 'noopener');
-  }
-  if(events.length > limit) alert(`Es wurden ${limit} Einträge geöffnet. Weitere ${events.length - limit} wurden nicht geöffnet (Limit).`);
+/* ---------- Utilities to attach events from saved data ---------- */
+function rehydrateAndRender(){
+  renderMonth(viewDate);
+  renderWeeks();
+}
+
+/* ---------- Start: render initial state ---------- */
+rehydrateAndRender();
+
+/* ---------- Ensure saves happen when user leaves ---------- */
+window.addEventListener('beforeunload', () => {
+  saveEvents();
 });
 
-/* ---------- Utility: ensure month renders after edits ---------- */
-</script>
+/* ---------- small helper: when clicking "Add" via speech, re-render --- */
+function addEventsFromInput(text){
+  const type = typeSelect.value;
+  const parsed = parseInputToEvent(text, type);
+  if(parsed && parsed.length){
+    events.push(...parsed);
+    saveEvents();
+    rehydrateAndRender();
+  }
+}
 
+/* make the mic button clickable twice if needed */
+micBtn.addEventListener('dblclick', ()=> {
+  // fallback to ensure recognition re-init
+  if(recognition) recognition.stop();
+});
+
+</script>
 </body>
 </html>

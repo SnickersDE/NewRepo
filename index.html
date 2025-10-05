@@ -21,14 +21,12 @@
       --accent-trans: rgba(128,0,32,0.18);
     }
 
-    /* DARK THEME (pure black background) */
     [data-theme="dark"] {
       --bg: var(--black);
       --panel: var(--glass-dark);
       --text: #fff;
     }
 
-    /* LIGHT THEME */
     [data-theme="light"] {
       --bg: #f7f7f7;
       --panel: rgba(255,255,255,0.6);
@@ -55,7 +53,6 @@
       transition: background-color .25s ease;
     }
 
-    /* App container */
     .app {
       width:95%;
       max-width:980px;
@@ -79,18 +76,9 @@
       backdrop-filter: blur(6px);
     }
 
-    header .title {
-      font-size:18px;
-      font-weight:700;
-      letter-spacing:1px;
-      color:var(--text);
-    }
+    header .title { font-size:18px; font-weight:700; letter-spacing:1px; color:var(--text); }
 
-    .controls {
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
+    .controls { display:flex; gap:10px; align-items:center; }
 
     .control-btn {
       background: transparent;
@@ -102,7 +90,6 @@
       font-weight:600;
     }
 
-    /* Left: Calendar area */
     .calendar-card {
       background:var(--panel);
       border-radius:14px;
@@ -115,17 +102,9 @@
       border: 1px solid rgba(0,0,0,0.04);
     }
 
-    .month-header {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
+    .month-header { display:flex; justify-content:space-between; align-items:center; }
 
-    .month-title {
-      font-size:18px;
-      font-weight:700;
-      color:var(--text);
-    }
+    .month-title { font-size:18px; font-weight:700; color:var(--text); }
 
     .nav-btn {
       background:transparent;
@@ -136,7 +115,6 @@
       color:var(--text);
     }
 
-    /* Calendar grid */
     .calendar-grid {
       display:grid;
       grid-template-columns: repeat(7,1fr);
@@ -159,12 +137,8 @@
 
     .day:hover { transform: translateY(-4px); }
 
-    .day .date-num {
-      font-size:13px;
-      font-weight:700;
-    }
+    .day .date-num { font-size:13px; font-weight:700; }
 
-    /* Event pill inside day (card edge colored) */
     .event-pill {
       margin-top:auto;
       padding:6px 8px;
@@ -175,16 +149,23 @@
       border-left:6px solid rgba(255,255,255,0.08);
       display:flex;
       justify-content:space-between;
-      gap:8px;
+      gap:6px;
       align-items:center;
+      position:relative;
     }
 
-    /* colors by type */
-    .type-default { border-left-color: rgba(255,255,255,0.08); }
-    .type-private { border-left-color: #d32f2f; } /* red */
-    .type-work    { border-left-color: #2e7d32; } /* green */
+    .event-pill .gc-link {
+      font-size:12px;
+      color:var(--bordeaux);
+      cursor:pointer;
+      margin-left:4px;
+      text-decoration:none;
+    }
 
-    /* Right column: Input & week list */
+    .type-default { border-left-color: rgba(255,255,255,0.08); }
+    .type-private { border-left-color: #d32f2f; }
+    .type-work    { border-left-color: #2e7d32; }
+
     .side-card {
       background:var(--panel);
       border-radius:14px;
@@ -195,11 +176,7 @@
       gap:12px;
     }
 
-    .input-row {
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
+    .input-row { display:flex; gap:8px; align-items:center; }
 
     .input-row input[type="text"]{
       flex:1;
@@ -231,7 +208,6 @@
       font-weight:700;
     }
 
-    /* weeks list */
     .weeks-list {
       display:flex;
       flex-direction:column;
@@ -275,7 +251,6 @@
 
     .tiny-muted { font-size:12px; opacity:0.7; }
 
-    /* responsive */
     @media (max-width:980px){
       .app { grid-template-columns: 1fr; }
     }
@@ -300,9 +275,7 @@
         <button class="nav-btn" id="nextMonth">▶</button>
       </div>
 
-      <div class="calendar-grid" id="calendarGrid">
-        <!-- days injected here -->
-      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
     </section>
 
     <!-- right: input & weeks -->
@@ -325,42 +298,29 @@
 
       <div>
         <div style="font-weight:700;margin-bottom:8px;">Kommende Wochen</div>
-        <div class="weeks-list" id="weeksList">
-          <!-- week items injected -->
-        </div>
+        <div class="weeks-list" id="weeksList"></div>
       </div>
     </aside>
   </div>
 
 <script>
-/* -------------------------
-  Data model + persistence
-   - uses localStorage for demo/pwa
----------------------------*/
-const STORAGE_KEY = 'mein_kalender_events_v1';
+const STORAGE_KEY = 'mein_kalender_events_v2';
 let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+let viewDate = new Date();
 
-/* state for displayed month */
-let viewDate = new Date(); // currently shown month
-
-/* initialize UI */
 document.addEventListener('DOMContentLoaded', () => {
   renderMonth(viewDate);
   renderWeeks();
   updateMonthTitle();
 });
 
-/* theme toggle */
 document.getElementById('themeToggle').addEventListener('click', () => {
   const body = document.body;
   const newTheme = body.dataset.theme === 'light' ? 'dark' : 'light';
   body.dataset.theme = newTheme;
-  // ensure pure black for dark
-  if(newTheme === 'dark'){ document.body.style.backgroundColor = '#000'; }
-  else { document.body.style.backgroundColor = ''; }
+  document.body.style.backgroundColor = (newTheme==='dark')?'#000':'';
 });
 
-/* month navigation */
 document.getElementById('prevMonth').addEventListener('click', ()=>{ changeMonth(-1); });
 document.getElementById('nextMonth').addEventListener('click', ()=>{ changeMonth(1); });
 
@@ -370,332 +330,180 @@ function changeMonth(offset){
   updateMonthTitle();
 }
 
-/* add event handling */
 document.getElementById('addEventBtn').addEventListener('click', () => {
   const raw = document.getElementById('freeInput').value.trim();
   const type = document.getElementById('typeSelect').value;
   if(!raw) return alert('Bitte Text eingeben (Datum + Beschreibung).');
 
-  const parsed = parseInputToEvent(raw, type);
-  if(!parsed){
-    return alert('Datum/Uhrzeit konnte nicht erkannt. Bitte im Format DD/MM/YYYY oder "heute" oder "morgen" angeben.');
+  const parsedEvents = parseInputToEvent(raw, type);
+  if(!parsedEvents || parsedEvents.length===0){
+    return alert('Datum/Uhrzeit konnte nicht erkannt werden.');
   }
 
-  // push and persist
-  events.push(parsed);
+  events.push(...parsedEvents);
   saveEvents();
   document.getElementById('freeInput').value = '';
   renderMonth(viewDate);
   renderWeeks();
 });
 
-/* clear all (dev) */
 document.getElementById('clearBtn').addEventListener('click', ()=>{
   if(confirm('Alle Events löschen?')) {
-    events = [];
+    events=[];
     saveEvents();
     renderMonth(viewDate);
     renderWeeks();
   }
 });
 
-/* save */
-function saveEvents(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-}
+function saveEvents(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(events)); }
 
-/* -------------------------
-  Rendering functions
----------------------------*/
-
-/* Month title */
 function updateMonthTitle(){
   const monthNames = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
-  const m = viewDate.getMonth();
-  const y = viewDate.getFullYear();
-  document.getElementById('monthTitle').textContent = `${monthNames[m]} ${y}`;
+  document.getElementById('monthTitle').textContent = `${monthNames[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
 }
 
-/* Render month grid (simple) */
 function renderMonth(date){
   const grid = document.getElementById('calendarGrid');
-  grid.innerHTML = '';
+  grid.innerHTML='';
 
-  const year = date.getFullYear();
-  const month = date.getMonth();
+  const year=date.getFullYear(), month=date.getMonth();
+  const first=new Date(year,month,1);
+  const startDay=(first.getDay()+6)%7;
+  const daysInMonth=new Date(year,month+1,0).getDate();
 
-  // first day of month
-  const first = new Date(year, month, 1);
-  const startDay = first.getDay(); // 0..6 Sun..Sat
-  // we want week starting Monday. convert: JS Sun=0 -> index 6 at end
-  const leadingEmpty = (startDay + 6) % 7; // number of empty cells before 1st
+  for(let i=0;i<startDay;i++){ const d=document.createElement('div'); d.className='day'; d.style.opacity=0.5; grid.appendChild(d); }
 
-  const daysInMonth = new Date(year, month+1, 0).getDate();
+  for(let day=1;day<=daysInMonth;day++){
+    const cellDate=new Date(year,month,day);
+    const cell=document.createElement('div'); cell.className='day';
+    const dateNum=document.createElement('div'); dateNum.className='date-num'; dateNum.textContent=day; cell.appendChild(dateNum);
 
-  // fill grid with empties then days
-  for(let i=0;i<leadingEmpty;i++){
-    const d = document.createElement('div');
-    d.className = 'day';
-    d.style.opacity = 0.5;
-    grid.appendChild(d);
-  }
+    const iso=formatYMD(cellDate);
+    const dayEvents=events.filter(e=>e.date===iso).sort((a,b)=> timeToMinutes(a.startTime)-timeToMinutes(b.startTime));
 
-  for(let day=1; day<=daysInMonth; day++){
-    const cellDate = new Date(year, month, day);
-    const cell = document.createElement('div');
-    cell.className = 'day';
-    const dateNum = document.createElement('div');
-    dateNum.className = 'date-num';
-    dateNum.textContent = day;
-    cell.appendChild(dateNum);
-
-    // find events for this date
-    const iso = formatYMD(cellDate);
-    const dayEvents = events.filter(e => e.date === iso)
-                            .sort((a,b)=> timeToMinutes(a.startTime)-timeToMinutes(b.startTime));
-
-    // add up to 2 event pills rendered; for more show "+n"
     if(dayEvents.length){
-      for(let i=0;i<Math.min(2,dayEvents.length); i++){
-        const ev = dayEvents[i];
-        const pill = document.createElement('div');
-        pill.className = 'event-pill ' + (ev.type === 'private' ? 'type-private' : (ev.type==='work' ? 'type-work' : 'type-default'));
-        pill.innerHTML = `<div style="font-size:12px; font-weight:700;">${ev.title}</div><div class="tiny-muted" style="font-size:11px">${ev.startTime||''}</div>`;
+      dayEvents.slice(0,2).forEach(ev=>{
+        const pill=document.createElement('div');
+        pill.className='event-pill '+(ev.type==='private'?'type-private':(ev.type==='work'?'type-work':'type-default'));
+        pill.innerHTML=`<div style="font-size:12px;font-weight:700;">${ev.title}</div><a class="gc-link" title="Google Kalender öffnen" href="${generateGoogleCalendarUrl(ev)}" target="_blank">📅</a>`;
         cell.appendChild(pill);
-      }
+      });
       if(dayEvents.length>2){
-        const more = document.createElement('div');
-        more.className = 'tiny-muted';
-        more.style.marginTop='6px';
-        more.textContent = `+${dayEvents.length-2} weitere`;
-        cell.appendChild(more);
+        const more=document.createElement('div'); more.className='tiny-muted'; more.style.marginTop='6px'; more.textContent=`+${dayEvents.length-2} weitere`; cell.appendChild(more);
       }
     }
 
-    // style border color if event present (outline)
-    if(dayEvents.some(e=> e.type==='private')) {
-      cell.style.border = '2px solid #d32f2f';
-    } else if(dayEvents.some(e=> e.type==='work')) {
-      cell.style.border = '2px solid #2e7d32';
-    } else if(dayEvents.length>0){
-      cell.style.border = '2px solid rgba(255,255,255,0.06)';
-    } else {
-      cell.style.border = '1px solid rgba(255,255,255,0.04)';
-    }
+    if(dayEvents.some(e=>e.type==='private')) cell.style.border='2px solid #d32f2f';
+    else if(dayEvents.some(e=>e.type==='work')) cell.style.border='2px solid #2e7d32';
+    else if(dayEvents.length>0) cell.style.border='2px solid rgba(255,255,255,0.06)';
+    else cell.style.border='1px solid rgba(255,255,255,0.04)';
 
     grid.appendChild(cell);
   }
 }
 
-/* Render weekly grouped list for upcoming weeks (4 weeks window) */
 function renderWeeks(){
-  const container = document.getElementById('weeksList');
-  container.innerHTML = '';
+  const container=document.getElementById('weeksList'); container.innerHTML='';
+  const today=startOfDay(new Date());
+  const weeks=[];
 
-  const today = startOfDay(new Date());
-  const weeks = []; // {startDate, endDate, events[]}
-
-  // compute next 8 weeks (configurable)
-  for(let w=0; w<8; w++){
-    const start = addDays(startOfWeek(today), w*7);
-    const end = addDays(start, 6);
-    // gather events inside
-    const evs = events.filter(e => {
-      const d = parseYMD(e.date);
-      return d >= start && d <= end;
-    }).sort((a,b)=> new Date(a.date+'T'+(a.startTime||'00:00')) - new Date(b.date+'T'+(b.startTime||'00:00')));
-    if(evs.length>0){
-      weeks.push({start, end, events: evs});
-    }
+  for(let w=0;w<8;w++){
+    const start=addDays(startOfWeek(today), w*7);
+    const end=addDays(start,6);
+    const evs=events.filter(e=>{ const d=parseYMD(e.date); return d>=start && d<=end; }).sort((a,b)=> new Date(a.date+'T'+(a.startTime||'00:00')) - new Date(b.date+'T'+(b.startTime||'00:00')));
+    if(evs.length>0) weeks.push({start,end,events:evs});
   }
 
-  // render only weeks that contain events
   weeks.forEach(wk=>{
-    const item = document.createElement('div');
-    item.className = 'week-item';
-    const title = document.createElement('div');
-    title.className = 'week-title';
-    title.innerHTML = `<div>${formatShort(wk.start)} — ${formatShort(wk.end)}</div><div class="tiny-muted">${wk.events.length} Termine</div>`;
+    const item=document.createElement('div'); item.className='week-item';
+    const title=document.createElement('div'); title.className='week-title';
+    title.innerHTML=`<div>${formatShort(wk.start)} — ${formatShort(wk.end)}</div><div class="tiny-muted">${wk.events.length} Termine</div>`;
     item.appendChild(title);
-
-    // events list
     wk.events.forEach(ev=>{
-      const row = document.createElement('div');
-      row.className = 'event-row ' + (ev.type === 'private' ? 'private' : (ev.type==='work' ? 'work' : 'default'));
-      row.innerHTML = `<div style="font-weight:700">${ev.title}</div><div class="tiny-muted">${formatDayTime(ev.date, ev.startTime)}</div>`;
-      // on click: open google calendar add URL (generated)
-      row.addEventListener('click', ()=> {
-        const url = generateGoogleCalendarUrl(ev);
-        window.open(url,'_blank');
-      });
+      const row=document.createElement('div');
+      row.className='event-row '+(ev.type==='private'?'private':(ev.type==='work'?'work':'default'));
+      row.innerHTML=`<div style="font-weight:700">${ev.title}</div><div class="tiny-muted">${formatDayTime(ev.date, ev.startTime)}</div>`;
+      row.addEventListener('click',()=>{ window.open(generateGoogleCalendarUrl(ev),'_blank'); });
       item.appendChild(row);
     });
-
     container.appendChild(item);
   });
 
-  // if no weeks, show placeholder
-  if(weeks.length===0){
-    container.innerHTML = `<div class="tiny-muted">Keine kommenden Termine.</div>`;
-  }
+  if(weeks.length===0) container.innerHTML=`<div class="tiny-muted">Keine kommenden Termine.</div>`;
 }
 
 /* -------------------------
-  Parsing: try to extract date/time/title from free text
-  Supports:
-   - DD/MM/YYYY or DD.MM.YYYY
-   - "heute", "morgen", "in X Tagen"
-   - optional time ranges: "20:00-22:00" or "20-22 Uhr" or "20-22"
-   - fallback: if only text, place on today
----------------------------*/
-function parseInputToEvent(text, type='default'){
-  // normalize
-  let t = text.trim();
+  Parsing with recurrence
+-------------------------*/
+function parseInputToEvent(text,type='default'){
+  const eventsList=[];
+  let t=text.trim();
+  let recurrenceMatch=t.match(/every\s+(\d+)\s+(days|weeks|months)/i);
+  let recurrence=null;
+  if(recurrenceMatch){
+    recurrence={interval:parseInt(recurrenceMatch[1],10),unit:recurrenceMatch[2].toLowerCase()};
+    t=t.replace(recurrenceMatch[0],'').trim();
+  }
 
-  // detect time range
-  const timeMatch = t.match(/(\d{1,2}[:.]?\d{0,2})\s*[-–]\s*(\d{1,2}[:.]?\d{0,2})/);
-  let startTime = '', endTime = '';
-  if(timeMatch){
-    startTime = normalizeTime(timeMatch[1]);
-    endTime = normalizeTime(timeMatch[2]);
-    t = t.replace(timeMatch[0],'').trim();
-  } else {
-    // also test for "um 20 Uhr" patterns
-    const around = t.match(/um\s+(\d{1,2}[:.]?\d{0,2})/i);
-    if(around){
-      startTime = normalizeTime(around[1]);
-      // default +1h
-      endTime = addHourToTime(startTime,1);
-      t = t.replace(around[0],'').trim();
+  const singleEvent=parseSingleEvent(t,type);
+  eventsList.push(singleEvent);
+
+  if(recurrence){
+    for(let i=1;i<5;i++){ // 4 future occurrences for demo
+      const d=new Date(singleEvent.date);
+      if(recurrence.unit==='days') d.setDate(d.getDate()+i*recurrence.interval);
+      if(recurrence.unit==='weeks') d.setDate(d.getDate()+i*7*recurrence.interval);
+      if(recurrence.unit==='months') d.setMonth(d.getMonth()+i*recurrence.interval);
+      eventsList.push({...singleEvent,date:formatYMD(d),id:'ev_'+Math.random().toString(36).slice(2,9)});
     }
   }
 
-  // detect explicit date formats dd/mm/yyyy or dd.mm.yyyy
-  let date = null;
-  const dateMatch = t.match(/(\d{1,2}[.\/]\d{1,2}[.\/]\d{2,4})/);
-  if(dateMatch){
-    date = parseDateString(dateMatch[1]);
-    t = t.replace(dateMatch[0],'').trim();
-  } else {
-    // special words
-    if(/\bheute\b/i.test(t)){ date = new Date(); t = t.replace(/\bheute\b/i,'').trim(); }
-    else if(/\bmorgen\b/i.test(t)){ date = addDays(new Date(),1); t = t.replace(/\bmorgen\b/i,'').trim(); }
-    else {
-      const inDays = t.match(/in\s+(\d{1,2})\s+tage?n?/i);
-      if(inDays){
-        date = addDays(new Date(), parseInt(inDays[1],10));
-        t = t.replace(inDays[0],'').trim();
-      }
-    }
-  }
+  return eventsList;
+}
 
-  if(!date) {
-    // if no date recognized, default to today
-    date = new Date();
-  }
+function parseSingleEvent(text,type){
+  let t=text.trim();
+  let startTime='',endTime='';
+  const timeMatch=t.match(/(\d{1,2}[:.]?\d{0,2})\s*[-–]\s*(\d{1,2}[:.]?\d{0,2})/);
+  if(timeMatch){ startTime=normalizeTime(timeMatch[1]); endTime=normalizeTime(timeMatch[2]); t=t.replace(timeMatch[0],'').trim(); }
+  else { const around=t.match(/um\s+(\d{1,2}[:.]?\d{0,2})/i); if(around){ startTime=normalizeTime(around[1]); endTime=addHourToTime(startTime,1); t=t.replace(around[0],'').trim(); } }
 
-  // remaining t is title/description
-  const title = t || 'Termin';
+  let date=null;
+  const dateMatch=t.match(/(\d{1,2}[.\/]\d{1,2}[.\/]\d{2,4})/);
+  if(dateMatch){ date=parseDateString(dateMatch[1]); t=t.replace(dateMatch[0],'').trim(); }
+  else if(/\bheute\b/i.test(t)){ date=new Date(); t=t.replace(/\bheute\b/i,'').trim(); }
+  else if(/\bmorgen\b/i.test(t)){ date=addDays(new Date(),1); t=t.replace(/\bmorgen\b/i,'').trim(); }
+  else { const inDays=t.match(/in\s+(\d{1,2})\s+tage?n?/i); if(inDays){ date=addDays(new Date(),parseInt(inDays[1],10)); t=t.replace(inDays[0],'').trim(); } }
 
-  // format date as YYYY-MM-DD internal
-  const isoDate = formatYMD(date);
-
-  return {
-    id: 'ev_' + Math.random().toString(36).slice(2,9),
-    date: isoDate,         // YYYY-MM-DD for internal usage
-    title: title,
-    startTime: startTime,  // "20:00" or ""
-    endTime: endTime,
-    type: type             // 'default' | 'private' | 'work'
-  };
+  if(!date) date=new Date();
+  const title=t||'Termin';
+  return {id:'ev_'+Math.random().toString(36).slice(2,9),date:formatYMD(date),title,startTime,endTime,type};
 }
 
 /* -------------------------
-  Helper util functions
----------------------------*/
-function formatYMD(d){
-  const dt = new Date(d);
-  const y = dt.getFullYear();
-  const m = String(dt.getMonth()+1).padStart(2,'0');
-  const day = String(dt.getDate()).padStart(2,'0');
-  return `${y}-${m}-${day}`;
-}
-function parseYMD(s){ // 'YYYY-MM-DD' to Date
-  const [y,m,d] = s.split('-').map(Number);
-  return new Date(y,m-1,d);
-}
-function formatShort(date){
-  const d = new Date(date);
-  const dd = String(d.getDate()).padStart(2,'0');
-  const mm = String(d.getMonth()+1).padStart(2,'0');
-  const yyyy = d.getFullYear();
-  return `${dd}.${mm}.${yyyy}`;
-}
-function formatDayTime(dateStr, timeStr){
-  const d = new Date(dateStr);
-  const day = d.toLocaleDateString('de-DE',{weekday:'short', day:'2-digit', month:'short'});
-  return timeStr ? `${day} • ${timeStr}` : `${day}`;
-}
-function startOfDay(date){ const d=new Date(date); d.setHours(0,0,0,0); return d; }
-function startOfWeek(date){ // Monday as first
-  const d = new Date(date);
-  const day = d.getDay() || 7;
-  d.setDate(d.getDate() - day + 1);
-  return startOfDay(d);
-}
-function addDays(d, days){ const x=new Date(d); x.setDate(x.getDate()+days); return x; }
-function timeToMinutes(t){ if(!t) return 0; const [hh,mm] = t.split(':').map(s=>parseInt(s||'0',10)); return hh*60 + mm; }
+  Helper functions
+-------------------------*/
+function formatYMD(d){ const dt=new Date(d); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`; }
+function parseYMD(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
+function formatShort(d){ const dd=new Date(d); return `${String(dd.getDate()).padStart(2,'0')}.${String(dd.getMonth()+1).padStart(2,'0')}.${dd.getFullYear()}`; }
+function formatDayTime(dateStr,timeStr){ const d=new Date(dateStr); const day=d.toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'short'}); return timeStr?`${day} • ${timeStr}`:day; }
+function startOfDay(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+function startOfWeek(d){ const x=new Date(d); const day=x.getDay()||7; x.setDate(x.getDate()-day+1); return startOfDay(x); }
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function timeToMinutes(t){ if(!t) return 0; const [hh,mm]=t.split(':').map(Number); return hh*60+mm; }
+function parseDateString(s){ const cleaned=s.replace(/\./g,'/'); const parts=cleaned.split('/'); if(parts.length===3){ let d=parseInt(parts[0],10), m=parseInt(parts[1],10), y=parseInt(parts[2],10); if(y<100) y+=2000; return new Date(y,m-1,d);} return null; }
+function normalizeTime(t){ const cleaned=t.replace('.',':'); if(/^\d{1,2}$/.test(cleaned)) return cleaned.padStart(2,'0')+':00'; if(/^\d{1,2}:\d{1,2}$/.test(cleaned)){ const [hh,mm]=cleaned.split(':'); return hh.padStart(2,'0')+':'+mm.padStart(2,'0'); } return ''; }
+function addHourToTime(t,h){ if(!t) return ''; const [hh,mm]=t.split(':').map(Number); const d=new Date(); d.setHours(hh+h, mm||0,0,0); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
 
-function parseDateString(s){
-  // accept dd/mm/yyyy or dd.mm.yyyy (2/4-digit year)
-  const cleaned = s.replace(/\./g,'/'); // normalize to /
-  const parts = cleaned.split('/');
-  if(parts.length===3){
-    let d = parseInt(parts[0],10), m = parseInt(parts[1],10), y = parseInt(parts[2],10);
-    if(y < 100) y = 2000 + y;
-    return new Date(y,m-1,d);
-  }
-  return null;
-}
-
-function normalizeTime(t){
-  // turn "20" or "20.00" into "20:00"
-  const cleaned = t.replace('.',':');
-  if(/^\d{1,2}$/.test(cleaned)) return cleaned.padStart(2,'0') + ':00';
-  if(/^\d{1,2}:\d{1,2}$/.test(cleaned)){
-    const [hh,mm] = cleaned.split(':');
-    return hh.padStart(2,'0') + ':' + mm.padStart(2,'0');
-  }
-  return '';
-}
-
-function addHourToTime(t, h){
-  if(!t) return '';
-  const [hh,mm] = t.split(':').map(Number);
-  const d = new Date();
-  d.setHours(hh+h, mm||0, 0, 0);
-  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
-}
-
-/* -------------------------
-  Generate Google Calendar "Add event" URL (opens prefilled GC dialog)
-  - No automatic POST (security reasons), user must confirm in Google
----------------------------*/
 function generateGoogleCalendarUrl(ev){
-  const dtStart = ev.date + (ev.startTime ? 'T' + ev.startTime.replace(':','') + '00' : 'T000000');
-  const dtEnd   = ev.date + (ev.endTime ? 'T' + ev.endTime.replace(':','') + '00' : ev.date + 'T010000');
-  // Format: YYYYMMDDTHHMMSSZ (we won't add timezone here for demo)
-  const formatForUrl = (s) => s.replace(/[-:]/g,'') + 'Z';
-  const startStr = formatForUrl(ev.date + 'T' + (ev.startTime ? ev.startTime.replace(':','')+'00' : '000000'));
-  const endStr   = formatForUrl(ev.date + 'T' + (ev.endTime ? ev.endTime.replace(':','')+'00' : '010000'));
-  const text = encodeURIComponent(ev.title);
-  const details = encodeURIComponent('Erstellt via MEIN KALENDAR');
+  const formatForUrl=(s)=>s.replace(/[-:]/g,'')+'Z';
+  const startStr=formatForUrl(ev.date+'T'+(ev.startTime?ev.startTime.replace(':','')+'00':'000000'));
+  const endStr=formatForUrl(ev.date+'T'+(ev.endTime?ev.endTime.replace(':','')+'00':'010000'));
+  const text=encodeURIComponent(ev.title);
+  const details=encodeURIComponent('Erstellt via MEIN KALENDAR');
   return `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${startStr}/${endStr}&details=${details}`;
 }
-
-/* -------------------------
-  Utility: when page loads, you might have old events - ensure month renders
----------------------------*/
 </script>
 </body>
 </html>

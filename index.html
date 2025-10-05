@@ -55,7 +55,6 @@ body{
   min-height:100vh;
   transition: background-color .25s ease;
 }
-
 /* Layout */
 .app {
   width:95%;
@@ -86,6 +85,8 @@ header .title { font-size:18px; font-weight:700; letter-spacing:1px; color:var(-
 /* google import gold arrow */
 .google-import { display:flex; align-items:center; gap:8px; cursor:pointer; padding:6px 8px; border-radius:8px; transition: transform .08s ease; color:var(--text); }
 .google-import:hover { transform: translateY(-2px); }
+  
+<button id="themeToggle">🌙 / ☀️</button>
 
 /* controls */
 .controls { display:flex; gap:10px; align-items:center; }
@@ -181,6 +182,24 @@ header .title { font-size:18px; font-weight:700; letter-spacing:1px; color:var(-
   .calendar-grid { gap:6px; }
   .day { min-height:68px; }
 }
+/* --- THEME TOGGLE BUTTON --- */
+#themeToggle {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  font-weight:700;
+  z-index: 999;
+  backdrop-filter: blur(6px);
+  transition: transform 0.12s ease, background 0.25s ease, color 0.25s ease;
+}
+#themeToggle:hover { transform: translateY(-2px); }
+
 </style>
 </head>
 <body data-theme="light">
@@ -254,7 +273,20 @@ header .title { font-size:18px; font-weight:700; letter-spacing:1px; color:var(-
 /* STORAGE KEYS */
 const STORAGE_KEY = 'mein_kalender_events_v_final_v3';
 const THEME_KEY = 'mein_kalender_theme_v3';
+const toggleBtn = document.getElementById('themeToggle');
 
+// initiales Laden des Themes
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
+// Button klick
+toggleBtn.onclick = () => {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+};
+  
 /* COLOR PALETTE */
 const COLOR_PALETTE = [
   {name:'Blau', hex:'#1976D2'},
@@ -939,3 +971,4 @@ function generateGoogleCalendarUrl(ev){
 
 </body>
 </html>
+

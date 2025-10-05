@@ -1,44 +1,187 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#800020" />
+  <title>LernSync (Beta)</title>
 
-  <!-- Responsive -->
-  <meta charset="utf-8">
-  <meta name="viewport" 
-        content="width=device-width,
-                 initial-scale=1">
-  <meta http-equiv="X-UA-Compatible"
-        content="ie=edge">
+  <style>
+    :root {
+      --primary: #800020;
+      --light-bg: #ffffff;
+      --text: #222;
+      --shadow: 0 4px 10px rgba(0,0,0,0.1);
+      --radius: 20px;
+    }
 
-  <!-- Title -->
-  <title>PWA Tutorial</title>
+    body {
+      font-family: 'Spartan', sans-serif;
+      background: var(--light-bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-  <!-- Meta Tags required for
-       Progressive Web App -->
-  <meta name=
-  "apple-mobile-web-app-status-bar" 
-        content="#aa7700">
-  <meta name="theme-color"
-        content="black">
+    header {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-top: 2rem;
+      letter-spacing: 1px;
+    }
 
-  <!-- Manifest File link -->
-  <link rel="manifest"
-        href="manifest.json">
+    main {
+      flex: 1;
+      width: 90%;
+      max-width: 420px;
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .calendar-box {
+      border: 1px solid #ddd;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .calendar-box h2 {
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .calendar-box input[type="date"] {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .input-box {
+      display: flex;
+      border: 1px solid #ddd;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .input-box input {
+      flex: 1;
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .input-box button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0 1.2rem;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: background 0.3s;
+    }
+
+    .input-box button:hover {
+      background: #a4002a;
+    }
+
+    footer {
+      font-size: 0.7rem;
+      color: #777;
+      margin: 1rem 0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --light-bg: #1a1a1a;
+        --text: #f1f1f1;
+        --shadow: 0 0 15px rgba(255,255,255,0.05);
+      }
+      body {
+        background: var(--light-bg);
+        color: var(--text);
+      }
+      .calendar-box, .input-box {
+        border-color: #333;
+      }
+    }
+  </style>
 </head>
-
 <body>
-  <h1 style="color: red;">
-    InspeechCalendar</h1>
+  <header>LERNSYNC (MVP)</header>
 
-  
-<p>
-    This is a simple tutorial for
-    creating a PWA application.
-  </p>
+  <main>
+    <!-- Kalender -->
+    <div class="calendar-box">
+      <h2 id="selected-date"></h2>
+      <input type="date" id="date-input" />
+    </div>
 
+    <!-- Eingabefeld -->
+    <div class="input-box">
+      <input
+        type="text"
+        id="note-input"
+        placeholder="Notiz eingeben..."
+      />
+      <button id="submit-btn">➤</button>
+    </div>
+  </main>
+
+  <footer>© 2025 LernSync – Beta Interface</footer>
 
   <script>
-    // Script for Service Worker
+    const dateInput = document.getElementById("date-input");
+    const selectedDateEl = document.getElementById("selected-date");
+    const noteInput = document.getElementById("note-input");
+    const submitBtn = document.getElementById("submit-btn");
+
+    // Standardmäßig heutiges Datum anzeigen
+    const today = new Date().toISOString().split("T")[0];
+    dateInput.value = today;
+    selectedDateEl.textContent = new Date().toLocaleDateString("de-DE", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    // Datumsauswahl aktualisieren
+    dateInput.addEventListener("change", () => {
+      const d = new Date(dateInput.value);
+      selectedDateEl.textContent = d.toLocaleDateString("de-DE", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    });
+
+    // Eingabe speichern (aktuell nur in Konsole)
+    submitBtn.addEventListener("click", () => {
+      const note = noteInput.value.trim();
+      if (!note) return;
+      console.log("Neuer Eintrag:", {
+        date: dateInput.value,
+        note,
+      });
+      noteInput.value = "";
+      alert("Notiz gespeichert (Demo)");
+    });
   </script>
 </body>
 </html>

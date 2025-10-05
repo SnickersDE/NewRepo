@@ -3,184 +3,187 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#800020" />
-  <title>LernSync (Beta)</title>
-
+  <title>Lernplan PWA</title>
+  <link rel="manifest" href="manifest.json">
   <style>
     :root {
-      --primary: #800020;
-      --light-bg: #ffffff;
-      --text: #222;
-      --shadow: 0 4px 10px rgba(0,0,0,0.1);
-      --radius: 20px;
+      --bordeaux: #7b1e3a;
+      --white: #ffffff;
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --dark-bg: rgba(0, 0, 0, 0.4);
+      --text-color: #222;
+    }
+
+    [data-theme="dark"] {
+      --bordeaux: #b14b6b;
+      --white: #121212;
+      --glass-bg: rgba(0, 0, 0, 0.4);
+      --text-color: #f2f2f2;
     }
 
     body {
       font-family: 'Spartan', sans-serif;
-      background: var(--light-bg);
-      color: var(--text);
+      text-transform: uppercase;
       margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+      background: url('hintergrund.jpg') no-repeat center center/cover;
+      color: var(--text-color);
+      backdrop-filter: blur(6px);
+      transition: background 0.3s, color 0.3s;
     }
 
     header {
-      font-size: 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--bordeaux);
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .toggle-btn {
+      background: var(--bordeaux);
+      color: var(--white);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
       font-weight: bold;
-      color: var(--primary);
-      margin-top: 2rem;
-      letter-spacing: 1px;
+      transition: 0.3s;
+    }
+
+    .toggle-btn:hover {
+      opacity: 0.8;
     }
 
     main {
-      flex: 1;
-      width: 90%;
-      max-width: 420px;
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+      padding: 1rem;
     }
 
-    .calendar-box {
-      border: 1px solid #ddd;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+    #calendar {
+      width: 100%;
+      background: var(--glass-bg);
+      border-radius: 15px;
       padding: 1rem;
       text-align: center;
+      margin-bottom: 1rem;
     }
 
-    .calendar-box h2 {
-      margin-bottom: 0.5rem;
-      color: var(--primary);
-      font-size: 1.2rem;
-    }
-
-    .calendar-box input[type="date"] {
-      width: 100%;
-      padding: 0.6rem;
+    .week {
+      background: var(--glass-bg);
       border-radius: 10px;
-      border: 1px solid #ccc;
-      text-align: center;
-      font-size: 1rem;
-    }
-
-    .input-box {
-      display: flex;
-      border: 1px solid #ddd;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      margin-bottom: 0.5rem;
       overflow: hidden;
     }
 
-    .input-box input {
-      flex: 1;
-      border: none;
-      padding: 1rem;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    .input-box button {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0 1.2rem;
+    .week-header {
+      background: var(--bordeaux);
+      color: var(--white);
+      padding: 0.5rem;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 1.1rem;
-      transition: background 0.3s;
+      text-align: left;
     }
 
-    .input-box button:hover {
-      background: #a4002a;
+    .week-content {
+      display: none;
+      padding: 0.5rem 1rem;
     }
 
-    footer {
-      font-size: 0.7rem;
-      color: #777;
-      margin: 1rem 0;
+    .input-area {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      background: var(--glass-bg);
+      padding: 0.5rem;
+      border-radius: 10px;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --light-bg: #1a1a1a;
-        --text: #f1f1f1;
-        --shadow: 0 0 15px rgba(255,255,255,0.05);
-      }
-      body {
-        background: var(--light-bg);
-        color: var(--text);
-      }
-      .calendar-box, .input-box {
-        border-color: #333;
-      }
+    input[type="text"] {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .mic-btn, .send-btn {
+      background: var(--bordeaux);
+      color: var(--white);
+      border: none;
+      padding: 0.5rem 0.7rem;
+      border-radius: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
-<body>
-  <header>LERNSYNC (MVP)</header>
+
+<body data-theme="light">
+  <header>
+    <h1>Lernplan</h1>
+    <div class="controls">
+      <button class="toggle-btn" id="themeToggle">☀ / 🌙</button>
+      <button class="toggle-btn" id="notifToggle">🔔</button>
+    </div>
+  </header>
 
   <main>
-    <!-- Kalender -->
-    <div class="calendar-box">
-      <h2 id="selected-date"></h2>
-      <input type="date" id="date-input" />
+    <div id="calendar">
+      <h2>📅 Oktober 2025</h2>
+      <p>Termine sind im Kalender sichtbar.</p>
     </div>
 
-    <!-- Eingabefeld -->
-    <div class="input-box">
-      <input
-        type="text"
-        id="note-input"
-        placeholder="Notiz eingeben..."
-      />
-      <button id="submit-btn">➤</button>
+    <div id="weeks">
+      <div class="week">
+        <div class="week-header">Woche 1 ▾</div>
+        <div class="week-content">
+          <p>17.10. — Einführung</p>
+          <p>18.10. — Übung 3</p>
+        </div>
+      </div>
+
+      <div class="week">
+        <div class="week-header">Woche 2 ▾</div>
+        <div class="week-content">
+          <p>24.10. — Vertiefung</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" placeholder="Notiz oder Termin hinzufügen...">
+      <button class="mic-btn">🎙</button>
+      <button class="send-btn">➤</button>
     </div>
   </main>
 
-  <footer>© 2025 LernSync – Beta Interface</footer>
-
   <script>
-    const dateInput = document.getElementById("date-input");
-    const selectedDateEl = document.getElementById("selected-date");
-    const noteInput = document.getElementById("note-input");
-    const submitBtn = document.getElementById("submit-btn");
-
-    // Standardmäßig heutiges Datum anzeigen
-    const today = new Date().toISOString().split("T")[0];
-    dateInput.value = today;
-    selectedDateEl.textContent = new Date().toLocaleDateString("de-DE", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    // Hell-/Dunkelmodus
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const body = document.body;
+      const newTheme = body.dataset.theme === 'light' ? 'dark' : 'light';
+      body.dataset.theme = newTheme;
     });
 
-    // Datumsauswahl aktualisieren
-    dateInput.addEventListener("change", () => {
-      const d = new Date(dateInput.value);
-      selectedDateEl.textContent = d.toLocaleDateString("de-DE", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+    // Wochen auf/zu klappen
+    document.querySelectorAll('.week-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        content.style.display = content.style.display === 'block' ? 'none' : 'block';
       });
     });
 
-    // Eingabe speichern (aktuell nur in Konsole)
-    submitBtn.addEventListener("click", () => {
-      const note = noteInput.value.trim();
-      if (!note) return;
-      console.log("Neuer Eintrag:", {
-        date: dateInput.value,
-        note,
-      });
-      noteInput.value = "";
-      alert("Notiz gespeichert (Demo)");
+    // Notification-Schalter (visuell)
+    const notifToggle = document.getElementById('notifToggle');
+    notifToggle.addEventListener('click', () => {
+      notifToggle.textContent = notifToggle.textContent === '🔔' ? '🔕' : '🔔';
     });
   </script>
 </body>
